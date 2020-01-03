@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.warmer.ui.dashboard.DashboardFragment"
+        android:name="com.example.warmer.ui.dashboard.MyEmotion"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/emotion_item" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.warmer.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_myemotion" />
 </navigation>
