@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -36,7 +37,7 @@ public class EmotionAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageButton imageButton;
+        ImageView imageButton;
         if (convertView == null) {
             convertView = inflater.inflate(layout, null);
         }
@@ -45,7 +46,7 @@ public class EmotionAdapter extends BaseAdapter {
         imageButton = convertView.findViewById(R.id.emotionItem);
         imageButton.setImageBitmap(bitmap);
         imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        // imageView.setLayoutParams(new GridView.LayoutParams(340,250));
+//         imageButton.setLayoutParams(new GridView.LayoutParams(340,250));
         return convertView;
     }
 }

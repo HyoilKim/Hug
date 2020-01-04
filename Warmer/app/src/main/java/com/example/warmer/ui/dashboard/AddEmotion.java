@@ -26,7 +26,7 @@ import com.example.warmer.R;
 
 import java.util.ArrayList;
 
-public class MyEmotion extends Fragment {
+public class AddEmotion extends Fragment {
     private Bitmap[][] emotionArr = new Bitmap[12][5];
     public ArrayList<String> seletedEmotions = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class MyEmotion extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_myemotion, container, false);
+        View view = inflater.inflate(R.layout.activity_add_emotion, container, false);
 
         emotionArr[0][0] = getBitmapFromVectorDrawable(getContext(), R.drawable.ic_home_black_24dp);
         emotionArr[0][1] = getBitmapFromVectorDrawable(getContext(), R.drawable.ic_home_black_24dp);

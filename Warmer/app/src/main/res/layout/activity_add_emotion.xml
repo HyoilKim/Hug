@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:asp="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    xmlns:asp="http://schemas.android.com/tools">
 
     <GridView
         android:layout_margin="20dp"
         android:id="@+id/emotionGridView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:numColumns="3"
+        android:horizontalSpacing="10dp">
     </GridView>
 </LinearLayout>

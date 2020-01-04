@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import com.example.warmer.R;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
     private View view;
     private ArrayList<Thumbnail> thumbnail_list;
     private ThumbnailAdapter adapter;
@@ -65,6 +66,8 @@ public class HomeFragment extends Fragment{
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
+                        // position에 따라서
+                        Log.d("position@@@@@@@@@@@", String.valueOf(position));
                         Intent intent = new Intent(getActivity(), VideoDetailView.class);
                         startActivity(intent);
                         // do whatever
@@ -88,8 +91,6 @@ public class HomeFragment extends Fragment{
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
-
         return bitmap;
     }
-
 }

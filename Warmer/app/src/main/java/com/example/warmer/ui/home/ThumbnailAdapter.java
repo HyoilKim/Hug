@@ -1,6 +1,7 @@
 package com.example.warmer.ui.home;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +27,12 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     public int getItemCount() { return thumbnails.size(); }
     public Thumbnail getItem(int i) { return thumbnails.get(i); }
 
-    private ItemClickListener mClickListener = null;
-    public interface ItemClickListener {
+    private OnItemClickListener mOnClickListener = null;
+    public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
+    public void setClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnClickListener = onItemClickListener;
     }
 
     // 실행이 반복되어 화면에 띄어주는 메소드 = getView(in listview)
@@ -70,7 +71,6 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Bitmap tmp = thumbnails.get(position).getImg();
         holder.thumbnail_btn.setImageBitmap(tmp);
-
     }
 //
 //    public void addItem(Bitmap imgBitmap, String name, String desc, String videoURL, String type) {
