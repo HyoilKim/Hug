@@ -1,4 +1,4 @@
-package com.example.warmer.ui.dashboard;
+package com.example.warmer.ui.calender;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,16 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.warmer.R;
-import com.example.warmer.ui.dashboard.Decorator.EventDecorator;
-import com.example.warmer.ui.dashboard.Decorator.OneDayDecorator;
-import com.example.warmer.ui.dashboard.Decorator.SaturdayDecorator;
-import com.example.warmer.ui.dashboard.Decorator.SundayDecorator;
+import com.example.warmer.ui.calender.Decorator.EventDecorator;
+import com.example.warmer.ui.calender.Decorator.OneDayDecorator;
+import com.example.warmer.ui.calender.Decorator.SaturdayDecorator;
+import com.example.warmer.ui.calender.Decorator.SundayDecorator;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,16 +87,16 @@ public class Calender extends Fragment {
             }
         });
 
-//        EditText editText = view.findViewById(R.id.calendarMemo);
-//        editText.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), AddEmotion.class);
-//                // 클릭
-//                startActivityForResult(intent, ADD_EMOTION);
-//            }
-//        });
+        TextView textView = view.findViewById(R.id.calendarMemo);
+        textView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SelectEmotion.class);
+                // 클릭
+                startActivityForResult(intent, ADD_EMOTION);
+            }
+        });
 
         return view;
     }

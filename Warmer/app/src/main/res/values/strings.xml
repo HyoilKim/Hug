@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Warmer</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">공유 온도</string>
+    <string name="title_dashboard">나의 온도</string>
+    <string name="title_community">다른 온도</string>
+    <string name="title_notifications">마이 페이지</string>
 </resources>

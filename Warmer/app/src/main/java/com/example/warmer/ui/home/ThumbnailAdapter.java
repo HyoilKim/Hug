@@ -71,6 +71,14 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Bitmap tmp = thumbnails.get(position).getImg();
         holder.thumbnail_btn.setImageBitmap(tmp);
+        holder.thumbnail_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("!!","~~~~~~~~~~~~~");
+                mOnClickListener.onItemClick(v, position);
+            }
+        });
+
     }
 //
 //    public void addItem(Bitmap imgBitmap, String name, String desc, String videoURL, String type) {
