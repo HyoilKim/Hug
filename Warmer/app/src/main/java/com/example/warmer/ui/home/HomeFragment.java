@@ -20,7 +20,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.example.warmer.MainActivity;
 import com.example.warmer.R;
+import com.example.warmer.ui.network.RequestData;
+import com.example.warmer.ui.network.ResponseListener;
+import com.example.warmer.ui.network.VolleyUtil;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,29 +41,66 @@ public class HomeFragment extends Fragment {
     private ArrayList<Thumbnail> thumbnail_list;
     private ThumbnailAdapter adapter;
 
+    final String serverURL = "http://192.249.19.252:1380";
+    final String media = "/medias";
+
+    private Gson gson = new Gson();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        thumbnail_list = new ArrayList<>();
-        Bitmap bitmap = getBitmapFromVectorDrawable(getActivity(), R.drawable.youtube_img);
-        Thumbnail thumbnail = new Thumbnail("img", "따뜻한 세상 이야기", "어느 한...", bitmap, null);
-        thumbnail_list.add(thumbnail);
-        thumbnail_list.add(thumbnail);
-        thumbnail_list.add(thumbnail);
+        // initialize request arguments
+        RequestData.RequestBuilder builder = new RequestData.RequestBuilder();
+        builder.setQueue(MainActivity.requestQueue)
+                .setRequestType(Request.Method.GET)
+                .setRequestURL(serverURL+media);
 
-        adapter = new ThumbnailAdapter(thumbnail_list, inflater);
-        // category마다 adapter 적용하는 thumbnail list 다름
-        RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
-        makeHorizontalView(recyclerView, thumbnail_list, inflater);
+        // request and receive response
+        VolleyUtil.callAPI(builder.requestBuild(), new ResponseListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    thumbnail_list = new ArrayList<>();
+                    JSONArray arrResponse = response.getJSONArray("THUMB_ARRAY");
+                    Log.d(Integer.toString(arrResponse.length()), "arr length: ");
+                    for(int i=0; i<arrResponse.length(); i++) {
+                        Thumbnail thumbnail = gson.fromJson(arrResponse.get(i).toString(), Thumbnail.class);
+                        thumbnail_list.add(thumbnail);
+                    }
 
-        recyclerView = view.findViewById(R.id.thumbnail_list2);
-        makeHorizontalView(recyclerView, thumbnail_list, inflater);
+                    // attach adapter
+                    adapter = new ThumbnailAdapter(thumbnail_list, inflater);
+                    // category마다 adapter 적용하는 thumbnail list 다름
+                    RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
+                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
+
+                    recyclerView = view.findViewById(R.id.thumbnail_list2);
+                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
+
+                } catch (JSONException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFail(VolleyError message) {
+                Log.i("TEST", "FAIL");
+            }
+        });
+
+
+
+//        thumbnail_list = new ArrayList<>();
+//        Bitmap bitmap = getBitmapFromVectorDrawable(getActivity(), R.drawable.youtube_img);
+//        Thumbnail thumbnail = new Thumbnail(1, "따뜻한 세상 이야기", "어느 한...", bitmap, null);
+//        thumbnail_list.add(thumbnail);
+//        thumbnail_list.add(thumbnail);
+//        thumbnail_list.add(thumbnail);
 
         return view;
     }
