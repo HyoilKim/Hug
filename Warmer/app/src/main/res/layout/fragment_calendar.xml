@@ -13,11 +13,11 @@
         app:mcv_selectionColor="#a9dbf0cb"
         app:mcv_showOtherDates="defaults" />
 
-    <EditText
+    <TextView
         android:id="@+id/calendarMemo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="370dp"
-        android:hint="상세한 내용을 기입하여, \n 나의 감정을 저장하는건 어떠세요?" />
+        android:hint="자신의 감정이 진실된 것인지 파악해보는건 어떠세요?" />
 
 </RelativeLayout>

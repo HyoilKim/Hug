@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,30 +8,47 @@
     <LinearLayout
         android:layout_width="200dp"
         android:layout_height="250dp"
-        android:background="#ffffff"
         android:orientation="vertical"
-        android:gravity="top">
-        <ImageView
+        android:gravity="top"
+        android:background="@drawable/youtube_img">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/youtube_img" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <Button
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/id"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:id="@+id/Cancel"
-                android:background="#bc8146"/>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#ffffff"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:hint="ID"/>
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="password"
+                android:layout_below="@+id/id"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/password">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:id="@+id/Cancel"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Ok"
+                    android:id="@+id/Ok"/>
+            </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.warmer.ui.dashboard.Decorator;
+package com.example.warmer.ui.calender.Decorator;
 
 import android.graphics.Color;
 import android.graphics.Typeface;

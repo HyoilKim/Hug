@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.warmer.ui.home.VideoDetailView" />
-        <activity android:name="com.example.warmer.ui.home.Thumbnail" />
-
+        <activity android:name="com.example.warmer.ui.home.Thumbnail" />]
+        <activity android:name=".ui.calender.SelectEmotion"/>
     </application>
 
 </manifest>

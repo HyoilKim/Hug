@@ -70,6 +70,16 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        Bitmap tmp = thumbnails.get(position).getImg();
+        holder.thumbnail_btn.setImageBitmap(tmp);
+        holder.thumbnail_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("!!","~~~~~~~~~~~~~");
+                mOnClickListener.onItemClick(v, position);
+            }
+        });
+
         Picasso.get().load(thumbnails.get(position).getThumbURL())
                 .into(holder.thumbnail_btn);
 //
