@@ -21,12 +21,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.warmer.MainActivity;
 import com.example.warmer.R;
 import com.example.warmer.ui.network.RequestData;
 import com.example.warmer.ui.network.ResponseListener;
+import com.example.warmer.ui.network.VolleySingleton;
 import com.example.warmer.ui.network.VolleyUtil;
 import com.google.gson.Gson;
 
@@ -54,44 +58,80 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // initialize request arguments
-        RequestData.RequestBuilder builder = new RequestData.RequestBuilder();
-        builder.setQueue(MainActivity.requestQueue)
-                .setRequestType(Request.Method.GET)
-                .setRequestURL(serverURL+media);
+        JsonArrayRequest mediaRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                serverURL + media,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for(int i=0; i<response.length(); i++) {
+                                Thumbnail thumbnail = gson.fromJson(response.getJSONObject(i).toString(), Thumbnail.class);
+                                thumbnail_list.add(thumbnail);
+                            }
 
-        // request and receive response
-        VolleyUtil.callAPI(builder.requestBuild(), new ResponseListener() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                try {
-                    thumbnail_list = new ArrayList<>();
-                    JSONArray arrResponse = response.getJSONArray("THUMB_ARRAY");
-                    Log.d(Integer.toString(arrResponse.length()), "arr length: ");
-                    for(int i=0; i<arrResponse.length(); i++) {
-                        Thumbnail thumbnail = gson.fromJson(arrResponse.get(i).toString(), Thumbnail.class);
-                        thumbnail_list.add(thumbnail);
+                            // attach adapter
+                            adapter = new ThumbnailAdapter(thumbnail_list, inflater);
+                            // category마다 adapter 적용하는 thumbnail list 다름
+                            RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
+                            makeHorizontalView(recyclerView, thumbnail_list, inflater);
+
+                            recyclerView = view.findViewById(R.id.thumbnail_list2);
+                            makeHorizontalView(recyclerView, thumbnail_list, inflater);
+
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
                     }
-
-                    // attach adapter
-                    adapter = new ThumbnailAdapter(thumbnail_list, inflater);
-                    // category마다 adapter 적용하는 thumbnail list 다름
-                    RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
-                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
-
-                    recyclerView = view.findViewById(R.id.thumbnail_list2);
-                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
-
-                } catch (JSONException exception) {
-                    exception.printStackTrace();
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("FAIL", "TEST");
+                    }
                 }
-            }
+        );
 
-            @Override
-            public void onFail(VolleyError message) {
-                Log.i("TEST", "FAIL");
-            }
-        });
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(mediaRequest);
+//        // initialize request arguments
+//        RequestData.RequestBuilder builder = new RequestData.RequestBuilder();
+//        builder.setQueue(VolleySingleton.getInstance(getContext()).getRequestQueue())
+//                .setRequestType(Request.Method.GET)
+//                .setRequestURL(serverURL+media);
+//
+//        // request and receive response
+//        VolleyUtil.callAPI(builder.requestBuild(), new ResponseListener() {
+//            @Override
+//            public void onSuccess(JSONObject response) {
+//                try {
+//                    thumbnail_list = new ArrayList<>();
+//                    JSONArray arrResponse = response.getJSONArray("THUMB_ARRAY");
+//                    Log.d(Integer.toString(arrResponse.length()), "arr length: ");
+//                    for(int i=0; i<arrResponse.length(); i++) {
+//                        Thumbnail thumbnail = gson.fromJson(arrResponse.get(i).toString(), Thumbnail.class);
+//                        thumbnail_list.add(thumbnail);
+//                    }
+//
+//                    // attach adapter
+//                    adapter = new ThumbnailAdapter(thumbnail_list, inflater);
+//                    // category마다 adapter 적용하는 thumbnail list 다름
+//                    RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
+//                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
+//
+//                    recyclerView = view.findViewById(R.id.thumbnail_list2);
+//                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
+//
+//                } catch (JSONException exception) {
+//                    exception.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFail(VolleyError message) {
+//                Log.i("TEST", "FAIL");
+//            }
+//        });
 
 
 

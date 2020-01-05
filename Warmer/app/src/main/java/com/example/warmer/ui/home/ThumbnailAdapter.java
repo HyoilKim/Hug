@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmer.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -69,8 +70,11 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Bitmap tmp = thumbnails.get(position).getImg();
-        holder.thumbnail_btn.setImageBitmap(tmp);
+        Picasso.get().load(thumbnails.get(position).getThumbURL())
+                .into(holder.thumbnail_btn);
+//
+//        Bitmap tmp = thumbnails.get(position).getImg();
+//        holder.thumbnail_btn.setImageBitmap(tmp);
     }
 //
 //    public void addItem(Bitmap imgBitmap, String name, String desc, String videoURL, String type) {
