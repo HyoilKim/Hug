@@ -24,14 +24,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.warmer.MainActivity;
 import com.example.warmer.R;
-import com.example.warmer.ui.network.RequestData;
-import com.example.warmer.ui.network.ResponseListener;
 import com.example.warmer.ui.network.VolleySingleton;
-import com.example.warmer.ui.network.VolleyUtil;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -57,7 +51,9 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        thumbnail_list = new ArrayList<>();
 
+        // construct a request
         JsonArrayRequest mediaRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 serverURL + media,
@@ -65,74 +61,27 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            for(int i=0; i<response.length(); i++) {
-                                Thumbnail thumbnail = gson.fromJson(response.getJSONObject(i).toString(), Thumbnail.class);
-                                thumbnail_list.add(thumbnail);
-                            }
+                        JsonAddToThumbList(thumbnail_list, response);
+                        // attach adapter
+                        adapter = new ThumbnailAdapter(thumbnail_list, inflater);
+                        // category마다 adapter 적용하는 thumbnail list 다름
+                        RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
+                        makeHorizontalView(recyclerView, thumbnail_list, inflater);
 
-                            // attach adapter
-                            adapter = new ThumbnailAdapter(thumbnail_list, inflater);
-                            // category마다 adapter 적용하는 thumbnail list 다름
-                            RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
-                            makeHorizontalView(recyclerView, thumbnail_list, inflater);
-
-                            recyclerView = view.findViewById(R.id.thumbnail_list2);
-                            makeHorizontalView(recyclerView, thumbnail_list, inflater);
-
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                        recyclerView = view.findViewById(R.id.thumbnail_list2);
+                        makeHorizontalView(recyclerView, thumbnail_list, inflater);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("FAIL", "TEST");
+                        Log.d("FAIL", "CONNECTION");
                     }
                 }
         );
 
+        // add the request to singleton requestQueue
         VolleySingleton.getInstance(getContext()).addToRequestQueue(mediaRequest);
-//        // initialize request arguments
-//        RequestData.RequestBuilder builder = new RequestData.RequestBuilder();
-//        builder.setQueue(VolleySingleton.getInstance(getContext()).getRequestQueue())
-//                .setRequestType(Request.Method.GET)
-//                .setRequestURL(serverURL+media);
-//
-//        // request and receive response
-//        VolleyUtil.callAPI(builder.requestBuild(), new ResponseListener() {
-//            @Override
-//            public void onSuccess(JSONObject response) {
-//                try {
-//                    thumbnail_list = new ArrayList<>();
-//                    JSONArray arrResponse = response.getJSONArray("THUMB_ARRAY");
-//                    Log.d(Integer.toString(arrResponse.length()), "arr length: ");
-//                    for(int i=0; i<arrResponse.length(); i++) {
-//                        Thumbnail thumbnail = gson.fromJson(arrResponse.get(i).toString(), Thumbnail.class);
-//                        thumbnail_list.add(thumbnail);
-//                    }
-//
-//                    // attach adapter
-//                    adapter = new ThumbnailAdapter(thumbnail_list, inflater);
-//                    // category마다 adapter 적용하는 thumbnail list 다름
-//                    RecyclerView recyclerView = view.findViewById(R.id.thumbnail_list1);
-//                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
-//
-//                    recyclerView = view.findViewById(R.id.thumbnail_list2);
-//                    makeHorizontalView(recyclerView, thumbnail_list, inflater);
-//
-//                } catch (JSONException exception) {
-//                    exception.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFail(VolleyError message) {
-//                Log.i("TEST", "FAIL");
-//            }
-//        });
-
 
 
 //        thumbnail_list = new ArrayList<>();
@@ -181,5 +130,24 @@ public class HomeFragment extends Fragment {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public static void JsonAddToThumbList(ArrayList<Thumbnail> thumbnail_list, JSONArray jsonArray) {
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                Thumbnail thumbnail = new Thumbnail(0, "", "", "", "");
+                thumbnail.setMid(jsonObject.getInt("mid"));
+                thumbnail.setThumbURL(jsonObject.getString("thumb"));
+                thumbnail.setMainTitle(jsonObject.getString("title"));
+                thumbnail.setSubtitle(jsonObject.getString("subtitle"));
+                thumbnail.setThumbURL(jsonObject.getString("video"));
+
+                thumbnail_list.add(thumbnail);
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
