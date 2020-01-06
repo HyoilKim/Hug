@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     // 실행이 반복되어 화면에 띄어주는 메소드 = getView(in listview)
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageButton thumbnail_btn;
+        private TextView main_title;
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -58,6 +60,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
 //            });
             // 뷰 객체에 대한 참조
             thumbnail_btn = itemView.findViewById(R.id.thumbnail_item);
+            main_title = itemView.findViewById(R.id.main_title);
         }
     }
 
@@ -71,13 +74,17 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        Picasso.get().load(thumbnails.get(position).getThumbURL())
+        // set item contents
+        Thumbnail thumb = thumbnails.get(position);
+        Picasso.get().load(thumb.getThumbURL())
                 .into(holder.thumbnail_btn);
+        holder.main_title.setText(thumb.getMainTitle());
+
 
         holder.thumbnail_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("!!","~~~~~~~~~~~~~");
+                Log.d("THUMBNAIL ","CLICKED");
                 mOnClickListener.onItemClick(v, position);
             }
         });

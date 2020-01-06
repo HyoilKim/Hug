@@ -21,9 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.warmer.ui.home.VideoDetailView" />
-        <activity android:name="com.example.warmer.ui.home.Thumbnail" />]
-        <activity android:name=".ui.calender.SelectEmotion"/>
+        <activity android:name="com.example.warmer.ui.home.detailView.VideoDetailView" />
+        <activity android:name="com.example.warmer.ui.home.Thumbnail" />
+        <activity android:name="com.example.warmer.ui.calender.SelectEmotion"/>
+        <activity android:name="com.example.warmer.ui.home.detailView.ImageDetailView" />
     </application>
 
 </manifest>
