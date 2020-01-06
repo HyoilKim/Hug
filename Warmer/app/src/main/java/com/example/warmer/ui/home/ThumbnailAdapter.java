@@ -41,20 +41,6 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
         ViewHolder(View itemView) {
             super(itemView);
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d("adatper","@@@@@@");
-//                    int pos = getAdapterPosition();
-//                    if (pos != RecyclerView.NO_POSITION) {
-//                        if (mClickListener != null) {
-//                            mClickListener.onItemClick(v, pos);
-//                        } else {
-//                            Log.d("listner", "null ");
-//                        }
-//                    }
-//                }
-//            });
             // 뷰 객체에 대한 참조
             thumbnail_btn = itemView.findViewById(R.id.thumbnail_item);
         }
@@ -80,10 +66,4 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
         });
 
     }
-//
-//    public void addItem(Bitmap imgBitmap, String name, String desc, String videoURL, String type) {
-//        Thumbnail item = new Thumbnail(type, name, desc, imgBitmap, videoURL);
-//        thumbnails.add(item);
-//        Log.d("added itme", name);
-//    }
 }

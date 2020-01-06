@@ -1,62 +1,66 @@
 package com.example.warmer.ui.calender;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmer.R;
+import com.example.warmer.ui.home.ThumbnailAdapter;
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.internal.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class SelectEmotion extends AppCompatActivity {
-    private RecyclerView recyclerview;
-
+    private ExpandableAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emotion);
+        init();
+        getData();
 
-        recyclerview = findViewById(R.id.recyclerView);
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        List<ExpandableListAdapter.Item> data = new ArrayList<>();
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "슬픈, 처지는"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "기운없는"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "위축된"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "우울한"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "화난"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "분한"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "불쾌한"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "신경질"));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "약오른"));
-
-        ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "놀란");
-        places.invisibleChildren = new ArrayList<>();
-        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "놀란"));
-        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "황당한"));
-        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "의아한"));
-        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "아찔한"));
-
-        data.add(places);
-
-//        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-//        recyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override public void onItemClick(View view, int position) {
-//                        // position에 따라서
-//                        Log.d("position@@@@@@@@@@@", String.valueOf(position));
-////                        Intent intent = new Intent(SelectEmotion.this, VideoDetailView.class);
-////                        startActivity(intent);
-//                    }
-//                    @Override public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                })
-//        );
-
-        recyclerview.setAdapter(new ExpandableListAdapter(data));
     }
+
+    private void init() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new ExpandableAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void getData() {
+        // 임의의 데이터입니다.
+        List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
+
+        for (int i = 0; i < listTitle.size(); i++) {
+            // 각 List의 값들을 data 객체에 set 해줍니다.
+            Data data = new Data();
+            data.setTitle(listTitle.get(i));
+            data.setResId(R.drawable.main_img);
+
+            // 각 값이 들어간 data를 adapter에 추가합니다.
+            adapter.addItem(data);
+        }
+
+        // adapter의 값이 변경되었다는 것을 알려줍니다.
+        adapter.notifyDataSetChanged();
+    }
+
 }

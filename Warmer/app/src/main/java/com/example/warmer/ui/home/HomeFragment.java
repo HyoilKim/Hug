@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
+
         adapter = new ThumbnailAdapter(thumbnail_list, inflater);
         recyclerView.setAdapter(adapter);
 
