@@ -21,6 +21,7 @@ import com.example.warmer.ui.calender.Decorator.EventDecorator;
 import com.example.warmer.ui.calender.Decorator.OneDayDecorator;
 import com.example.warmer.ui.calender.Decorator.SaturdayDecorator;
 import com.example.warmer.ui.calender.Decorator.SundayDecorator;
+import com.google.android.flexbox.FlexboxLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -62,7 +63,7 @@ public class Calender extends Fragment {
                 new SaturdayDecorator(),
                 oneDayDecorator);
 
-        String[] result = {"2017,03,18","2017,04,18","2017,05,18","2017,06,18"};
+        String[] result = {"2017,03,18","2017,04,18","2017,05,18","2020,01,07"};
 
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
@@ -84,6 +85,13 @@ public class Calender extends Fragment {
                 materialCalendarView.clearSelection();
 
                 Toast.makeText(getContext(), shot_Day , Toast.LENGTH_SHORT).show();
+                // short day의 일기 내용으로 교체
+                TextView textview = view.findViewById(R.id.calendarMemo);
+                textview.setText("작성"); // year, month, day, 회원가입 id로 접근
+
+//                List<CalendarDay> tmp = new ArrayList<>();
+//                tmp.add(date);
+//                materialCalendarView.addDecorator(new EventDecorator(Color.BLACK, tmp, getActivity()));
             }
         });
 
@@ -93,7 +101,7 @@ public class Calender extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SelectEmotion.class);
-                // 클릭
+                // 클릭(일기 내용도 같이 보내기)
                 startActivityForResult(intent, ADD_EMOTION);
             }
         });
@@ -111,7 +119,7 @@ public class Calender extends Fragment {
         }
     }
 
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
+    public class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
         String[] Time_Result;
         ApiSimulator(String[] Time_Result){
             this.Time_Result = Time_Result;
@@ -137,10 +145,11 @@ public class Calender extends Fragment {
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
-
+                Log.d("day", year + " " + " month " +""+dayy);
                 dates.add(day);
                 calendar.set(year,month-1,dayy);
             }
+
             return dates;
         }
 
@@ -150,7 +159,7 @@ public class Calender extends Fragment {
             if (getActivity().isFinishing()) {
                 return;
             }
-            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, calendarDays, getActivity()));
+            materialCalendarView.addDecorator(new EventDecorator(Color.BLACK, calendarDays, getActivity()));
         }
 
     }

@@ -11,9 +11,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <CheckBox
@@ -21,9 +22,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recyclerView"
-                android:text="공개여부"
+                android:text="전체공개"
                 android:layout_gravity="right"
                 android:layout_marginRight="15dp"/>
+
 
             <EditText
                 android:id="@+id/emotionMemo"
@@ -33,7 +35,7 @@
                 android:gravity="center"
                 android:layout_marginTop="20dp"
                 android:textSize="15dp"
-                android:hint="상세한 내용으로 기억을 담아두는건 어떠신가요?"/>
+                android:hint="누구에게 어떻게 느낀 감정인가요?"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
