@@ -1,4 +1,4 @@
-package com.example.warmer.ui.home;
+package com.example.warmer.ui.home.detailView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ public class VideoDetailView extends YouTubeBaseActivity {
         listener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo("9-VkbFe2U3U");
+                youTubePlayer.loadVideo(getIntent().getStringExtra("videoURL"));
             }
 
             @Override
