@@ -1,33 +1,31 @@
 package com.example.warmer.ui.home;
 
-import android.graphics.Bitmap;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Thumbnail extends AppCompatActivity {
-    private String name;
-    private String desc;
-    private Bitmap img;
+    private int mid;
+    private String thumbURL;
+    private String mainTitle;
+    private String subtitle;
     private String videoURL;
-    private String type;
 
-    public Thumbnail(String type, String name, String desc, Bitmap img, String videoURL) {
-        this.name = name;
-        this.desc = desc;
-        this.img = img;
+    public Thumbnail(int mid, String thumbURL, String mainTitle, String subtitle, String videoURL) {
+        this.mid = mid;
+        this.thumbURL = thumbURL;
+        this.mainTitle = mainTitle;
+        this.subtitle = subtitle;
         this.videoURL = videoURL;
-        this.type = type;
     }
 
-    public String getName() { return name; }
-    public String getDesc() { return desc; }
-    public Bitmap getImg() { return img; }
+    public int getMid() { return mid; }
+    public String getThumbURL() { return thumbURL; }
+    public String getMainTitle() { return mainTitle; }
+    public String getSubtitle() { return subtitle; }
     public String getVideoURL() { return videoURL; }
-    public String getType() { return type; }
 
-    public void setName(String name) { this.name = name; }
-    public void setDesc(String desc) { this.desc = desc; }
-    public void setImg(Bitmap img) { this.img = img; }
+    public void setMid(int mid) { this.mid = mid; }
+    public void setThumbURL(String thumbURL) { this.thumbURL = thumbURL; }
+    public void setMainTitle(String mainTitle) { this.mainTitle = mainTitle; }
+    public void setSubtitle(String subtitle) { this.subtitle = subtitle; }
     public void setVideoURL(String videoURL) { this.videoURL = videoURL; }
-    public void setType(String type) { this.type = type; }
 }
