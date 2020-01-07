@@ -17,18 +17,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.warmer.R;
+import com.example.warmer.ui.mypage.MyPage;
 import com.example.warmer.ui.network.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CommunityFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private ArrayList<Diary> diary_list;
+    private static ArrayList<Diary> my_diary_list;
     DiaryListAdapter diaryListAdapter;
 
 
@@ -46,6 +49,7 @@ public class CommunityFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         diary_list = new ArrayList<>();
+        my_diary_list = new ArrayList<>();
 
         // construct request to get all diaries
         JsonArrayRequest diaryRequest = new JsonArrayRequest(
@@ -55,7 +59,7 @@ public class CommunityFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        addJsonToDiaryList(diary_list, response);
+                        addJsonToDiaryList(diary_list, my_diary_list, response);
 
                         // attach adapter to list
                         diaryListAdapter = new DiaryListAdapter(diary_list);
@@ -76,19 +80,31 @@ public class CommunityFragment extends Fragment {
 
     }
 
-    public static void addJsonToDiaryList(ArrayList<Diary> diary_list, JSONArray jsonArray)
+    public static void addJsonToDiaryList(ArrayList<Diary> diary_list, ArrayList<Diary> my_diary_list, JSONArray jsonArray)
     {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                Diary diary = new Diary("", "");
+                Diary diary = new Diary("", "", "");
                 diary.setDate(jsonObject.getString("date"));
                 diary.setContents(jsonObject.getString("text"));
+                diary.setUid(jsonObject.getString("uid"));
                 diary_list.add(diary);
+
+                if(MyPage.getUserId().equals(diary.getUid()))
+                    my_diary_list.add(diary);
             }
         }catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Diary> getDiaryList() {
+        return diary_list;
+    }
+
+    public static ArrayList<Diary> getMyDiaryList() {
+        return my_diary_list;
     }
 }
