@@ -48,7 +48,7 @@ public class SelectEmotion extends AppCompatActivity {
 
         View view = getLayoutInflater().inflate(R.layout.item, null, false);
 
-        FlexboxLayout flexboxLayout = view.findViewById(R.id.itemFlexBox);
+//        FlexboxLayout flexboxLayout = view.findViewById(R.id.itemFlexBox);
 
         List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
         for (int i = 0; i < listTitle.size(); i++) {
@@ -56,7 +56,7 @@ public class SelectEmotion extends AppCompatActivity {
             Data data = new Data();
             data.setTitle(listTitle.get(i));
             data.setResId(R.drawable.main_img);
-            data.setFlexboxLayout(flexboxLayout);
+//            data.setFlexboxLayout(flexboxLayout);
             // 각 값이 들어간 data를 adapter에 추가합니다.
             adapter.addItem(data);
         }

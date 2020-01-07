@@ -75,19 +75,15 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             // item.xml 참조
             textView1 = itemView.findViewById(R.id.textView1);
             imageView1 = itemView.findViewById(R.id.imageView1);
+            Chip chip = itemView.findViewById(R.id.chip);
             chipList = new ArrayList<>();
-//            Chip chip = itemView.findViewById(R.id.chip);
-//
-//            ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
-//            chip.setChipDrawable(drawable);
-//            chip.setPadding(10, 10, 10,10);
-//            chip.setText("chip" + tmp++);
-//            chipList.add(chip);
+            chip.setText("chip" + tmp);
+            chipList.add(chip);
             // *************** DB **************** //
             // db에서 선택된 감정 전부 선택된걸로 표시
             // textView1(감정종류)에 따라서 chip(emotion)변경
 //            FlexboxLayout flexboxLayout = itemView.findViewById(R.id.itemFlexBox);
-//
+
 //            for (int i = 0; i < 2; i++ ) {
 //                final Chip chip = new Chip(context);
 //                ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
@@ -96,7 +92,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 //                chip.setPadding(10, 10, 10,10);
 //
 //                chip.setText(tmp + " 감정 ");
-//                Log.d("tmp", String.valueOf(tmp));
+                Log.d("tmp", String.valueOf(tmp));
 //                tmp++;
 //                chip.setOnClickListener(new Chip.OnClickListener() {
 //                    @Override

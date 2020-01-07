@@ -19,8 +19,9 @@
 
     <fragment
         android:id="@+id/navigation_community"
-        android:name="com.example.warmer.ui.mypage.MyPage"
-        android:label="@layout/fragment_community" />
+        android:name="com.example.warmer.ui.community.CommunityFragment"
+        android:label="@layout/fragment_community"
+        tools:layout="@layout/fragment_community" />
 
     <fragment
         android:id="@+id/navigation_notifications"
