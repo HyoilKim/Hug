@@ -1,6 +1,7 @@
 package com.example.warmer.ui.calender;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmer.R;
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +19,14 @@ import java.util.List;
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
     public static final int CHILD = 1;
-
+    private Context context;
     private List<Item> data;
     public ExpandableListAdapter(List<Item> data) { this.data = data; }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int type) {
         View view = null;
-        Context context = parent.getContext();
+        context = parent.getContext();
         float dp = context.getResources().getDisplayMetrics().density;
         int subItemPaddingLeft = (int) (18 * dp);
         int subItemPaddingTopAndBottom = (int) (5 * dp);
@@ -32,8 +35,21 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.list_header, parent, false);
                 ListHeaderViewHolder header = new ListHeaderViewHolder(view);
+
+                Chip chip = new Chip(context);
+                chip.setText("@@@");
+                header.flexboxLayout.addView(chip);
+
                 return header;
             case CHILD:
+                // child에 우째 넣냐 ㅅㅂ
+                LayoutInflater inflater1 = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater1.inflate(R.layout.item, parent, false);
+                data.get(0).flexboxLayout = view.findViewById(R.id.itemFlexBox);
+                Chip chip1 = new Chip(context);
+                chip1.setText("@@@");
+                data.get(0).flexboxLayout.addView(chip1);
+
                 TextView itemTextView = new TextView(context);
                 itemTextView.setPadding(subItemPaddingLeft, subItemPaddingTopAndBottom, 0, subItemPaddingTopAndBottom);
                 itemTextView.setTextColor(0x88000000);
@@ -49,6 +65,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Item item = data.get(position);
+
         switch (item.type) {
             case HEADER:
                 final ListHeaderViewHolder itemController = (ListHeaderViewHolder) holder;
@@ -103,11 +120,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public TextView header_title;
         public ImageView btn_expand_toggle;
         public Item refferalItem;
+        public FlexboxLayout flexboxLayout;
 
         public ListHeaderViewHolder(View itemView) {
             super(itemView);
             header_title = (TextView) itemView.findViewById(R.id.header_title);
             btn_expand_toggle = (ImageView) itemView.findViewById(R.id.btn_expand_toggle);
+            flexboxLayout = (FlexboxLayout) itemView.findViewById(R.id.flexBox);
         }
     }
 
@@ -115,10 +134,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public int type;
         public String text;
         public List<Item> invisibleChildren;
+        public FlexboxLayout flexboxLayout;
 
-        public Item(int type, String text) {
+        public Item(int type, String text, FlexboxLayout flexboxLayout) {
             this.type = type;
             this.text = text;
+            this.flexboxLayout = flexboxLayout;
+
         }
     }
 }

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmer.R;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
 
 import java.util.ArrayList;
 
@@ -25,15 +26,20 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     private ArrayList<Data> listData = new ArrayList<>();                  // adapter에 들어갈 list 입니다.
     private Context context;
     private SparseBooleanArray selectedItems = new SparseBooleanArray();   // Item의 클릭 상태를 저장할 array 객체
+    private ArrayList<Chip> selectedChipList = new ArrayList<>();
     private int prePosition = -1;                                          // 직전에 클릭됐던 Item의 position
 
+    int tmp = 0;
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // LayoutInflater를 이용하여 전 단계에서 만들었던 item.xml을 inflate 시킵니다.
         // return 인자는 ViewHolder 입니다.
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        View view = inflater.inflate(R.layout.item, parent, false) ;
+        Log.d("itetviewholder", "@@@@@@@@@@@");
         return new ItemViewHolder(view);
     }
 
@@ -57,14 +63,12 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         private TextView textView1;
         private ImageView imageView1;
         private ArrayList<Chip> chipList;
         private Data data;
         private int position;
-
-        // item을 처음 생성 할 때만 실행
+        // item을 처음 생성 할 때만 실행돼야 하는데 왜 2번 더 실행되냐고 =====================================================
         ItemViewHolder(View itemView) {
             super(itemView);
             // item.xml 참조
@@ -73,16 +77,31 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             chipList = new ArrayList<>();
 
             // *************** DB **************** //
+            // db에서 선택된 감정 전부 선택된걸로 표시
             // textView1(감정종류)에 따라서 chip(emotion)변경
             FlexboxLayout flexboxLayout = itemView.findViewById(R.id.itemFlexBox);
 
-            for (int i = 0; i < 3; i++ ) {
+            for (int i = 0; i < 2; i++ ) {
                 final Chip chip = new Chip(context);
-                chip.setText("new" + i);
+                ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
+                // chip 선택된 것 표시
+                chip.setChipDrawable(drawable);
+                chip.setPadding(10, 10, 10,10);
+
+                chip.setText(tmp + " 감정 ");
+                Log.d("tmp", String.valueOf(tmp));
+                tmp++;
                 chip.setOnClickListener(new Chip.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d("chip ", chip.getText()+"");
+                        if (selectedChipList.contains(chip)) {
+                            Log.d("~","chip 존재해서 삭제");
+                            selectedChipList.remove(chip);
+                        } else {
+                            selectedChipList.add(chip);
+                            Log.d("~", "chip 새로 추가");
+                        }
 //                        chip.setChipBackgroundColorResource(R.color.colorPrimary);
                     }
                 });
@@ -110,26 +129,27 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.linearItem:
-                    Log.d("item", "~~~~~~~~~~~~");
-                    // 펼쳐진 Item을 클릭 시
-                    if (selectedItems.get(position)) {
-                        selectedItems.delete(position);
-                    } else {
-                        // 직전의 클릭됐던 Item의 클릭상태를 지움
-//                        selectedItems.delete(prePosition);
-                        // 클릭한 Item의 position을 저장
-                        selectedItems.put(position, true);
-                    }
-                    if (prePosition != -1) notifyItemChanged(prePosition);  // 해당 포지션의 변화를 알림
-                    notifyItemChanged(position);
-                    prePosition = position;                                 // 클릭된 position 저장
-                    break;
+//            Log.d("obj", v.toString());
+//            if (selectedItems.get(position)) {
+////                selectedItems.setValueAt(position, false);
+//                selectedItems.delete(position);
+//            } else {
+//                selectedItems.delete(prePosition);
+//                selectedItems.put(position, true);
+////                selectedItems.append(position, true);
+//            }
+//            if (prePosition != -1) notifyItemChanged(prePosition);
+//            notifyItemChanged(position);
+//            prePosition = position;
 
+            if ( selectedItems.get(position, false) ){
+                selectedItems.put(position, false);
+                v.setBackgroundColor(Color.WHITE);
+            } else {
+                selectedItems.put(position, true);
+                v.setBackgroundColor(Color.BLUE);
             }
         }
-
         // animation & visible/gone
         private void changeVisibility(final boolean isExpanded) {
             // height 값을 dp로 지정해서 넣고싶으면 아래 소스를 이용
@@ -153,5 +173,6 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             // Animation start
             va.start();
         }
+
     }
 }
