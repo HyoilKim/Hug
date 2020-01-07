@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JsonAddToThumbList(video_list, picture_list, response);
+                        addJsonToThumbList(video_list, picture_list, response);
 
                         // attach adapter to list1
                         videoAdapter = new ThumbnailAdapter(video_list, inflater);
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
         return bitmap;
     }
 
-    public static void JsonAddToThumbList(ArrayList<Thumbnail> video_list,
+    public static void addJsonToThumbList(ArrayList<Thumbnail> video_list,
                                           ArrayList<Thumbnail> picture_list,
                                           JSONArray jsonArray)
     {

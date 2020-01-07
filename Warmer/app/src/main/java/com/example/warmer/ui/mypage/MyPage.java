@@ -21,14 +21,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.warmer.R;
 import com.example.warmer.ui.network.VolleySingleton;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class MyPage extends Fragment {
     private PopupWindow mPopupWindow;
@@ -44,8 +47,11 @@ public class MyPage extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
-        Button popup = (Button) view.findViewById(R.id.login);
-        popup.setOnClickListener(new View.OnClickListener() {
+        Button signInButton = (Button) view.findViewById(R.id.sign_in);
+        Button signUpButton = (Button) view.findViewById(R.id.sign_up);
+
+        // set popup window for sign-in
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View popupView = getLayoutInflater().inflate(R.layout.login_popup, null);
@@ -58,6 +64,7 @@ public class MyPage extends Fragment {
                 final EditText passwordText = (EditText) popupView.findViewById(R.id.password);
 
                 Button ok = (Button) popupView.findViewById(R.id.Ok);
+                ok.setText("SIGN IN");
                 Button cancel = (Button) popupView.findViewById(R.id.Cancel);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -77,7 +84,7 @@ public class MyPage extends Fragment {
                         // set request to get account information
                         JsonObjectRequest accountRequest = new JsonObjectRequest(
                                 Request.Method.GET,
-                                "http://192.249.19.252:1380/accounts/:"+"\""+id+"\"",
+                                "http://192.249.19.252:1380/accounts/:"+id,
                                 null,
                                 new Response.Listener<JSONObject>() {
                                     @Override
@@ -103,17 +110,6 @@ public class MyPage extends Fragment {
                                         idText.setText("");
                                         passwordText.setText("");
                                         Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
-//                                        try {
-//                                            String response = new String(error.networkResponse.data, "utf-8");
-//                                            JSONObject jsonObject = new JSONObject(response);
-//                                        } catch (UnsupportedEncodingException ueError) {
-//                                            idText.setText("");
-//                                            passwordText.setText("");
-//                                            Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
-//                                        } catch (JSONException jError) {
-//                                            Log.d("JSON", "ERROR");
-//                                            jError.printStackTrace();
-//                                        }
                                     }
                                 }
                         );
@@ -123,6 +119,81 @@ public class MyPage extends Fragment {
                 });
             }
         });
+
+        // set popup window for sign-up
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View popupView = getLayoutInflater().inflate(R.layout.login_popup, null);
+                mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                //popupView 에서 (LinearLayout 을 사용) 레이아웃이 둘러싸고 있는 컨텐츠의 크기 만큼 팝업 크기를 지정
+                mPopupWindow.setFocusable(true); // 외부 영역 선택히 PopUp 종료
+                mPopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+                final EditText idText = (EditText) popupView.findViewById(R.id.id);
+                final EditText passwordText = (EditText) popupView.findViewById(R.id.password);
+
+                Button ok = (Button) popupView.findViewById(R.id.Ok);
+                ok.setText("SIGN UP");
+                Button cancel = (Button) popupView.findViewById(R.id.Cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPopupWindow.dismiss();
+                    }
+                });
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final String id = idText.getText().toString();
+                        final String password = passwordText.getText().toString();
+                        final ArrayList<String> id_list = new ArrayList<>();
+
+                        // build POST request JSONObject parameter
+                        final JSONObject jsonBody = new JSONObject();
+                        try {
+                            jsonBody.put("uid", id);
+                            jsonBody.put("password", password);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // set request to add account
+                        JsonObjectRequest addAccountRequest = new JsonObjectRequest(
+                                Request.Method.POST,
+                                "http://192.249.19.252:1380/accounts/:",
+                                jsonBody,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Log.d("JSON", response.toString());
+                                        if(isDuplicateId(response)){
+                                            idText.setText("");
+                                            passwordText.setText("");
+                                            Toast.makeText(getContext(), "ID is unavailable" , Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            mPopupWindow.dismiss();
+                                            Toast.makeText(getContext(), "Successfully signed up", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                    }
+                                }
+                        );
+
+                        VolleySingleton.getInstance(getContext()).addToRequestQueue(addAccountRequest);
+
+                    }
+                });
+            }
+        });
+
         return view;
     }
 
@@ -136,6 +207,32 @@ public class MyPage extends Fragment {
         } catch (JSONException je) {
             je.printStackTrace();
             return false;
+        }
+    }
+
+    public Boolean isDuplicateId(JSONObject jsonObject) {
+        try{
+            if (jsonObject.getInt("errno")==1062) {
+                return true;
+            }
+            else
+                return false;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
+
+    public static void addJsonToIdList(ArrayList<String> id_list,
+                                          JSONArray jsonArray)
+    {
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                id_list.add(jsonObject.getString("uid"));
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
