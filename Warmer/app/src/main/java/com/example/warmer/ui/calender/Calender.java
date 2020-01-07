@@ -186,7 +186,6 @@ public class Calender extends Fragment {
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
-                Log.d("day", year + " " + month +" "+dayy);
                 dates.add(day);
                 calendar.set(year,month-1,dayy);
             }
