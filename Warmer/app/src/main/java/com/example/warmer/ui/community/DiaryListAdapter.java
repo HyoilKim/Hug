@@ -18,8 +18,8 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
     private ArrayList<Diary> diaryList;
     private Context context;
 
-    public DiaryListAdapter() {
-        this.diaryList = new ArrayList<>();
+    public DiaryListAdapter(ArrayList<Diary> diary_list) {
+        this.diaryList = diary_list;
     }
 
     @NonNull
@@ -34,8 +34,10 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull DiaryListAdapter.ViewHolder holder, int position) {
-        String str = diaryList.get(position).getContents();
-        holder.textView.setText(str);
+        String contents = diaryList.get(position).getContents();
+        String date = diaryList.get(position).getDate();
+        holder.contentsView.setText(contents);
+        holder.dateView.setText(date);
     }
 
     @Override
@@ -43,15 +45,13 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
         return diaryList.size();
     }
 
-    public void addItem (Diary diary) {
-        this.diaryList.add(diary);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+        public TextView contentsView;
+        public TextView dateView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.diaryItem);
+            contentsView = (TextView) itemView.findViewById(R.id.diaryItem);
+            dateView = (TextView) itemView.findViewById(R.id.line);
         }
     }
 
