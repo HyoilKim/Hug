@@ -6,11 +6,13 @@ public class Diary {
     private String date;
     private String contents;
     private String uid;
+    private int shared;
 
-    public Diary(String date, String contents, String uid){
+    public Diary(String date, String contents, String uid, int bool){
         this.date = date;
         this.contents = contents;
         this.uid = uid;
+        this.shared = bool;
     }
 
     public String getContents() {
@@ -22,6 +24,9 @@ public class Diary {
     public String getUid() {
         return uid;
     }
+    public int getShared() {
+        return shared;
+    }
     public void setContents(String contents) {
         this.contents = contents;
     }
@@ -29,4 +34,5 @@ public class Diary {
         this.date = date;
     }
     public void setUid(String uid) { this.uid = uid; }
+    public void setShared(int bool) { this.shared = bool; }
 }

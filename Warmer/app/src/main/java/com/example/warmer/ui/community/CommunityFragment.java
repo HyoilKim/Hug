@@ -31,7 +31,9 @@ public class CommunityFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private ArrayList<Diary> diary_list;
+    private ArrayList<Diary> shared_list;
     private static ArrayList<Diary> my_diary_list;
+
     DiaryListAdapter diaryListAdapter;
 
 
@@ -50,6 +52,7 @@ public class CommunityFragment extends Fragment {
 
         diary_list = new ArrayList<>();
         my_diary_list = new ArrayList<>();
+        shared_list = new ArrayList<>();
 
         // construct request to get all diaries
         JsonArrayRequest diaryRequest = new JsonArrayRequest(
@@ -59,10 +62,10 @@ public class CommunityFragment extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        addJsonToDiaryList(diary_list, my_diary_list, response);
+                        addJsonToDiaryList(diary_list, my_diary_list, shared_list, response);
 
                         // attach adapter to list
-                        diaryListAdapter = new DiaryListAdapter(diary_list);
+                        diaryListAdapter = new DiaryListAdapter(shared_list);
                         recyclerView.setAdapter(diaryListAdapter);
                     }
                 },
@@ -80,20 +83,27 @@ public class CommunityFragment extends Fragment {
 
     }
 
-    public static void addJsonToDiaryList(ArrayList<Diary> diary_list, ArrayList<Diary> my_diary_list, JSONArray jsonArray)
+    public static void addJsonToDiaryList(
+            ArrayList<Diary> diary_list,
+            ArrayList<Diary> my_diary_list,
+            ArrayList<Diary> shared_list,
+            JSONArray jsonArray)
     {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                Diary diary = new Diary("", "", "");
+                Diary diary = new Diary("", "", "", 0);
                 diary.setDate(jsonObject.getString("date"));
                 diary.setContents(jsonObject.getString("text"));
                 diary.setUid(jsonObject.getString("uid"));
+                diary.setShared(jsonObject.getInt(("shared")));
                 diary_list.add(diary);
 
                 if(MyPage.getUserId().equals(diary.getUid()))
                     my_diary_list.add(diary);
+                if(diary.getShared()==1)
+                    shared_list.add(diary);
             }
         }catch (JSONException e) {
             e.printStackTrace();

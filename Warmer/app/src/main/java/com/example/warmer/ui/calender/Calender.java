@@ -178,7 +178,7 @@ public class Calender extends Fragment {
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
-            Diary dummy = new Diary("2020.01.01", "dummy", "dummy");
+            Diary dummy = new Diary("2020.01.01", "dummy", "dummy", 0);
             Time_Result.add(dummy);
             for(int i=0; i<Time_Result.size(); i++){
                 CalendarDay day = CalendarDay.from(calendar);
