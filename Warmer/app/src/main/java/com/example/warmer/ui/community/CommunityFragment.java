@@ -17,9 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.warmer.R;
-import com.example.warmer.ui.calender.Data;
-import com.example.warmer.ui.home.Thumbnail;
-import com.example.warmer.ui.home.ThumbnailAdapter;
 import com.example.warmer.ui.network.VolleySingleton;
 
 import org.json.JSONArray;
@@ -27,8 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class CommunityFragment extends Fragment {
     private View view;
@@ -52,8 +47,7 @@ public class CommunityFragment extends Fragment {
 
         diary_list = new ArrayList<>();
 
-        // construct a request
-        // params : request method / url / JSON / response listener / error listener
+        // construct request to get all diaries
         JsonArrayRequest diaryRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 "http://192.249.19.252:1380/diaries",
@@ -64,7 +58,6 @@ public class CommunityFragment extends Fragment {
                         addJsonToDiaryList(diary_list, response);
 
                         // attach adapter to list
-                        Log.d("diaries", diary_list.toString());
                         diaryListAdapter = new DiaryListAdapter(diary_list);
                         recyclerView.setAdapter(diaryListAdapter);
                     }

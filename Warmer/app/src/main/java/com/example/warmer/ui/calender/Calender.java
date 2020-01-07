@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -89,48 +90,27 @@ public class Calender extends Fragment {
                 int Day = date.getDay();
                 final TextView textview = view.findViewById(R.id.calendarMemo);
 
-                Log.i("Year test", Year + "");
-                Log.i("Month test", Month + "");
-                Log.i("Day test", Day + "");
-
                 String strDate = Integer.toString(Year*10000+Month*100+Day);
-                String shot_Day = strDate.substring(0,4)+"."+strDate.substring(4,6)+"."+strDate.substring(6,8);
+                final String shot_Day = strDate.substring(0,4)+"."+strDate.substring(4,6)+"."+strDate.substring(6,8);
 
-
-                Log.i("shot_Day test", shot_Day + "");
                 materialCalendarView.clearSelection();
 
                 Toast.makeText(getContext(), shot_Day , Toast.LENGTH_SHORT).show();
 
-                // build request JSONObject
-                final JSONObject jsonBody = new JSONObject();
-                try {
-                    jsonBody.put("uid", MyPage.getUserId());
-                    jsonBody.put("date", shot_Day);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // build request to display diary text
-                JsonObjectRequest privateDiaryRequest = new JsonObjectRequest(
+                JsonArrayRequest privateDiaryRequest = new JsonArrayRequest(
                         Request.Method.GET,
-                        "http://192.249.19.252:1380/diaries:",
-                        jsonBody,
-                        new Response.Listener<JSONObject>() {
+                        "http://192.249.19.252:1380/diaries/:"+MyPage.getUserId(),
+                        null,
+                        new Response.Listener<JSONArray>() {
                             @Override
-                            public void onResponse(JSONObject response) {
-                                Log.d("diary", response.toString());
-                                try {
-                                    textview.setText(response.getString("text"));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            public void onResponse(JSONArray response) {
+                                textview.setText(getDairy(response, shot_Day));
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Log.d("diary", error.toString());
+                                Log.d("ERROR: ", error.toString());
                                 textview.setText("No diary this day");
                             }
                         }
@@ -212,4 +192,16 @@ public class Calender extends Fragment {
 
     }
 
+    public String getDairy(JSONArray jsonArray, String date) {
+        try {
+            for (int i=0; i<jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.getString("date").equals(date))
+                    return jsonObject.getString("text");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "No diary this day";
+    }
 }
