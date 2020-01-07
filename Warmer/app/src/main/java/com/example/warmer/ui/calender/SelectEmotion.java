@@ -28,13 +28,46 @@ import java.util.List;
 
 public class SelectEmotion extends AppCompatActivity {
     private ExpandableAdapter adapter;
+    private ExpandableListAdapter adapter1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emotion);
-        init();
-        getData();
 
+        RecyclerView recyclerview = findViewById(R.id.recyclerView);
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        List<ExpandableListAdapter.Item> data = new ArrayList<>();
+
+        View view = getLayoutInflater().inflate(R.layout.item, null, false);
+        FlexboxLayout flexboxLayout = view.findViewById(R.id.itemFlexBox);
+        if (flexboxLayout == null ) {
+            Log.d("@@","@");
+        }
+        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Fruits", flexboxLayout));
+        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Apple",flexboxLayout));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Orange"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Banana"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Cars"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Audi"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Aston Martin"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "BMW"));
+//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Cadillac"));
+
+//        ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Places");
+//        places.invisibleChildren = new ArrayList<>();
+//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Kerala"));
+//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tamil Nadu"));
+//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Karnataka"));
+//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Maharashtra"));
+
+//        data.add(places);
+
+        recyclerview.setAdapter(new ExpandableListAdapter(data));
+
+
+
+//        getData();
+//        init();
     }
 
     private void init() {
@@ -42,13 +75,8 @@ public class SelectEmotion extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new ExpandableAdapter();
-        recyclerView.setAdapter(adapter);
-    }
 
-    private void getData() {
-        // 임의의 데이터입니다.
         List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
-
         for (int i = 0; i < listTitle.size(); i++) {
             // 각 List의 값들을 data 객체에 set 해줍니다.
             Data data = new Data();
@@ -59,8 +87,25 @@ public class SelectEmotion extends AppCompatActivity {
             adapter.addItem(data);
         }
 
-        // adapter의 값이 변경되었다는 것을 알려줍니다.
-        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
     }
+
+//    private void getData() {
+//        // 임의의 데이터입니다.
+//        List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
+//
+//        for (int i = 0; i < listTitle.size(); i++) {
+//            // 각 List의 값들을 data 객체에 set 해줍니다.
+//            Data data = new Data();
+//            data.setTitle(listTitle.get(i));
+//            data.setResId(R.drawable.main_img);
+//
+//            // 각 값이 들어간 data를 adapter에 추가합니다.
+//            adapter.addItem(data);
+//        }
+//
+//        // adapter의 값이 변경되었다는 것을 알려줍니다.
+//        adapter.notifyDataSetChanged();
+//    }
 
 }

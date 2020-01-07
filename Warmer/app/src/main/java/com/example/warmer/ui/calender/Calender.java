@@ -63,11 +63,12 @@ public class Calender extends Fragment {
                 new SaturdayDecorator(),
                 oneDayDecorator);
 
-        String[] result = {"2017,03,18","2017,04,18","2017,05,18","2020,01,07"};
+        // **************** DB에 작성된 나의 일기 목록 ***************** //
+        String[] result = {"2020,01,18","2020,01,15","2020,01,13","2020,01,10"};
 
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
-        // 날짜 클릭 리스너 -> fragment교체로 자료보여주기
+        // 날짜 클릭 리스너
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -87,11 +88,8 @@ public class Calender extends Fragment {
                 Toast.makeText(getContext(), shot_Day , Toast.LENGTH_SHORT).show();
                 // short day의 일기 내용으로 교체
                 TextView textview = view.findViewById(R.id.calendarMemo);
-                textview.setText("작성"); // year, month, day, 회원가입 id로 접근
+                textview.setText("작성"); // ************* year, month, day, 회원가입 id로 접근 ********************* //
 
-//                List<CalendarDay> tmp = new ArrayList<>();
-//                tmp.add(date);
-//                materialCalendarView.addDecorator(new EventDecorator(Color.BLACK, tmp, getActivity()));
             }
         });
 
@@ -114,7 +112,7 @@ public class Calender extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case ADD_EMOTION:
-
+                // ************** ok 누르면 점찍기 *********** //
                 default: break;
         }
     }
@@ -145,7 +143,7 @@ public class Calender extends Fragment {
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
-                Log.d("day", year + " " + " month " +""+dayy);
+                Log.d("day", year + " " + month +" "+dayy);
                 dates.add(day);
                 calendar.set(year,month-1,dayy);
             }
@@ -155,11 +153,13 @@ public class Calender extends Fragment {
 
         @Override
         protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
+
+            Log.d("size", String.valueOf(calendarDays.size()));
             super.onPostExecute(calendarDays);
             if (getActivity().isFinishing()) {
                 return;
             }
-            materialCalendarView.addDecorator(new EventDecorator(Color.BLACK, calendarDays, getActivity()));
+            materialCalendarView.addDecorator(new EventDecorator(Color.LTGRAY, calendarDays, getActivity()));
         }
 
     }
