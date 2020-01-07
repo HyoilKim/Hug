@@ -51,7 +51,7 @@ public class ImageDetailView extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        JsonAddToImageList(image_list, response);
+                        addJsonToImageList(image_list, response);
 
                         pagerAdapter = new ImagePagerAdapter(mContext, image_list);
                         mPager.setAdapter(pagerAdapter);
@@ -67,23 +67,10 @@ public class ImageDetailView extends AppCompatActivity {
         );
 
         VolleySingleton.getInstance(this).addToRequestQueue(imageRequest);
-
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (mPager.getCurrentItem() == 0) {
-//            // If the user is currently looking at the first step, allow the system to handle the
-//            // Back button. This calls finish() on this activity and pops the back stack.
-//            super.onBackPressed();
-//        } else {
-//            // Otherwise, select the previous step.
-//            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-//        }
-//    }
 
-
-    public static void JsonAddToImageList(ArrayList<String> image_list,
+    public static void addJsonToImageList(ArrayList<String> image_list,
                                           JSONArray jsonArray)
     {
         try {

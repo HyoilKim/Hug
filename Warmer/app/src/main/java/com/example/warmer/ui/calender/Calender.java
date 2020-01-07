@@ -16,16 +16,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.warmer.R;
 import com.example.warmer.ui.calender.Decorator.EventDecorator;
 import com.example.warmer.ui.calender.Decorator.OneDayDecorator;
 import com.example.warmer.ui.calender.Decorator.SaturdayDecorator;
 import com.example.warmer.ui.calender.Decorator.SundayDecorator;
+import com.example.warmer.ui.home.ThumbnailAdapter;
+import com.example.warmer.ui.mypage.MyPage;
+import com.example.warmer.ui.network.VolleySingleton;
 import com.google.android.flexbox.FlexboxLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,21 +87,57 @@ public class Calender extends Fragment {
                 int Year = date.getYear();
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
+                final TextView textview = view.findViewById(R.id.calendarMemo);
 
                 Log.i("Year test", Year + "");
                 Log.i("Month test", Month + "");
                 Log.i("Day test", Day + "");
 
-                String shot_Day = Year + "," + Month + "," + Day;
+                String strDate = Integer.toString(Year*10000+Month*100+Day);
+                String shot_Day = strDate.substring(0,4)+"."+strDate.substring(4,6)+"."+strDate.substring(6,8);
+
 
                 Log.i("shot_Day test", shot_Day + "");
                 materialCalendarView.clearSelection();
 
                 Toast.makeText(getContext(), shot_Day , Toast.LENGTH_SHORT).show();
-                // short day의 일기 내용으로 교체
-                TextView textview = view.findViewById(R.id.calendarMemo);
-                textview.setText("작성"); // ************* year, month, day, 회원가입 id로 접근 ********************* //
 
+                // build request JSONObject
+                final JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("uid", MyPage.getUserId());
+                    jsonBody.put("date", shot_Day);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // build request to display diary text
+                JsonObjectRequest privateDiaryRequest = new JsonObjectRequest(
+                        Request.Method.GET,
+                        "http://192.249.19.252:1380/diaries:",
+                        jsonBody,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d("diary", response.toString());
+                                try {
+                                    textview.setText(response.getString("text"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("diary", error.toString());
+                                textview.setText("No diary this day");
+                            }
+                        }
+                );
+
+                // add the request to singleton requestQueue
+                VolleySingleton.getInstance(getContext()).addToRequestQueue(privateDiaryRequest);
             }
         });
 

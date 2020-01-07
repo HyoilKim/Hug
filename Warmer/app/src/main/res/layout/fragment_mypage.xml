@@ -4,11 +4,18 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="top|center">
+    android:gravity="top|center"
+    android:orientation="horizontal">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="로그인"
-        android:id="@+id/login"/>
+        android:text="SIGN IN"
+        android:id="@+id/sign_in"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP"
+        android:id="@+id/sign_up"/>
 </LinearLayout>
