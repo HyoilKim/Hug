@@ -28,8 +28,8 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     private SparseBooleanArray selectedItems = new SparseBooleanArray();   // Item의 클릭 상태를 저장할 array 객체
     private ArrayList<Chip> selectedChipList = new ArrayList<>();
     private int prePosition = -1;                                          // 직전에 클릭됐던 Item의 position
+    private ArrayList<Chip[]> chipList;
 
-    int tmp = 0;
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -65,53 +65,25 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView textView1;
         private ImageView imageView1;
+        private FlexboxLayout flexboxLayout;
         private ArrayList<Chip> chipList;
         private Data data;
+        private Chip chip1, chip2, chip3, chip4, chip5;
         private int position;
-        private FlexboxLayout flexboxLayout;
         // item을 처음 생성 할 때만 실행돼야 하는데 왜 2번 더 실행되냐고 =====================================================
         ItemViewHolder(View itemView) {
             super(itemView);
+            Log.d("constructr","~~~~~~~~~~");
             // item.xml 참조
             textView1 = itemView.findViewById(R.id.textView1);
             imageView1 = itemView.findViewById(R.id.imageView1);
-            Chip chip = itemView.findViewById(R.id.chip);
-            chipList = new ArrayList<>();
-            chip.setText("chip" + tmp);
-            chipList.add(chip);
-            // *************** DB **************** //
-            // db에서 선택된 감정 전부 선택된걸로 표시
-            // textView1(감정종류)에 따라서 chip(emotion)변경
-//            FlexboxLayout flexboxLayout = itemView.findViewById(R.id.itemFlexBox);
+            chip1 = itemView.findViewById(R.id.chip1);
+            chip2 = itemView.findViewById(R.id.chip2);
+            chip3 = itemView.findViewById(R.id.chip3);
+            chip4 = itemView.findViewById(R.id.chip4);
+            chip5 = itemView.findViewById(R.id.chip5);
 
-//            for (int i = 0; i < 2; i++ ) {
-//                final Chip chip = new Chip(context);
-//                ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
-//                // chip 선택된 것 표시
-//                chip.setChipDrawable(drawable);
-//                chip.setPadding(10, 10, 10,10);
-//
-//                chip.setText(tmp + " 감정 ");
-                Log.d("tmp", String.valueOf(tmp));
-//                tmp++;
-//                chip.setOnClickListener(new Chip.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.d("chip ", chip.getText()+"");
-//                        if (selectedChipList.contains(chip)) {
-//                            Log.d("~","chip 존재해서 삭제");
-//                            selectedChipList.remove(chip);
-//                        } else {
-//                            selectedChipList.add(chip);
-//                            Log.d("~", "chip 새로 추가");
-//                        }
-////                        chip.setChipBackgroundColorResource(R.color.colorPrimary);
-//                    }
-//                });
-//                chipList.add(chip);
-//                flexboxLayout.addView(chip);
-//            }
-//            Log.d("chip len",  chipList.size() + " ");
+            chipList = new ArrayList<>();
         }
 
         // item.xml 값 세팅
@@ -122,6 +94,8 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             // textView1(감정), imageView(대표 이미지) 세팅
             textView1.setText(data.getTitle());
             imageView1.setImageResource(data.getResId());
+            chip1.setText("chip1");
+            flexboxLayout = data.getFlexboxLayout();
 
             changeVisibility(selectedItems.get(position));
 
@@ -132,28 +106,19 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 
         @Override
         public void onClick(View v) {
-            Log.d("len", String.valueOf(selectedItems.size()));
-            for (int i = 0; i < selectedItems.size(); i++) {
-                Log.d("item ~~~~~~", selectedItems.get(i)+"");
-            }
-            Log.d("pos", String.valueOf(position));
-            if (selectedItems.get(position)) {
-                selectedItems.delete(position);
-            } else {
-                selectedItems.delete(prePosition);
-                selectedItems.put(position, true);
-            }
-            if (prePosition != -1) notifyItemChanged(prePosition);
-            notifyItemChanged(position);
-            prePosition = position;
-
-//            if ( selectedItems.get(position, false) ){
-//                selectedItems.put(position, false);
-//                v.setBackgroundColor(Color.WHITE);
-//            } else {
-//                selectedItems.put(position, true);
-//                v.setBackgroundColor(Color.BLUE);
+//            Log.d("len", String.valueOf(selectedItems.size()));
+//            this.chip2.setText("chip2");
+//            Log.d("pos", String.valueOf(position));
+//            if (selectedItems.get(position)) {
+//                selectedItems.delete(position);
 //            }
+//            else {
+//                selectedItems.delete(prePosition);
+//                selectedItems.put(position, true);
+//            }
+//            if (prePosition != -1) notifyItemChanged(prePosition);
+//            notifyItemChanged(position);
+//            prePosition = position;
         }
         // animation & visible/gone
         private void changeVisibility(final boolean isExpanded) {

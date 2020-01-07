@@ -77,7 +77,7 @@ public class Calender extends Fragment {
                 oneDayDecorator);
 
         // **************** DB에 작성된 나의 일기 목록 ***************** //
-        String[] result = {"2020,01,18","2020,01,15","2020,01,13","2020,01,10"};
+        String[] result = {"2020,01,14","2020,01,13","2020,01,12"};
 
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
@@ -88,6 +88,7 @@ public class Calender extends Fragment {
                 int Year = date.getYear();
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
+
                 final TextView textview = view.findViewById(R.id.calendarMemo);
 
                 String strDate = Integer.toString(Year*10000+Month*100+Day);

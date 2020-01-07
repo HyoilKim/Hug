@@ -34,7 +34,7 @@ public class ImageDetailView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((AppCompatActivity)this).getSupportActionBar().hide();
-        
+
         int mid = getIntent().getIntExtra("mid", 0);
         mContext = ImageDetailView.this;
 
