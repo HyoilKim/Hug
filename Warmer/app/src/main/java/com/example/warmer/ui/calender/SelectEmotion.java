@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +29,6 @@ import java.util.List;
 
 public class SelectEmotion extends AppCompatActivity {
     private ExpandableAdapter adapter;
-    private ExpandableListAdapter adapter1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,38 +36,8 @@ public class SelectEmotion extends AppCompatActivity {
 
         RecyclerView recyclerview = findViewById(R.id.recyclerView);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        List<ExpandableListAdapter.Item> data = new ArrayList<>();
-
-        View view = getLayoutInflater().inflate(R.layout.item, null, false);
-        FlexboxLayout flexboxLayout = view.findViewById(R.id.itemFlexBox);
-        if (flexboxLayout == null ) {
-            Log.d("@@","@");
-        }
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Fruits", flexboxLayout));
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Apple",flexboxLayout));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Orange"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Banana"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Cars"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Audi"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Aston Martin"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "BMW"));
-//        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Cadillac"));
-
-//        ExpandableListAdapter.Item places = new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, "Places");
-//        places.invisibleChildren = new ArrayList<>();
-//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Kerala"));
-//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Tamil Nadu"));
-//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Karnataka"));
-//        places.invisibleChildren.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, "Maharashtra"));
-
-//        data.add(places);
-
-        recyclerview.setAdapter(new ExpandableListAdapter(data));
-
-
-
-//        getData();
-//        init();
+        recyclerview.setAdapter(new ExpandableAdapter());
+        init();
     }
 
     private void init() {
@@ -76,13 +46,17 @@ public class SelectEmotion extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new ExpandableAdapter();
 
+        View view = getLayoutInflater().inflate(R.layout.item, null, false);
+
+        FlexboxLayout flexboxLayout = view.findViewById(R.id.itemFlexBox);
+
         List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
         for (int i = 0; i < listTitle.size(); i++) {
             // 각 List의 값들을 data 객체에 set 해줍니다.
             Data data = new Data();
             data.setTitle(listTitle.get(i));
             data.setResId(R.drawable.main_img);
-
+            data.setFlexboxLayout(flexboxLayout);
             // 각 값이 들어간 data를 adapter에 추가합니다.
             adapter.addItem(data);
         }

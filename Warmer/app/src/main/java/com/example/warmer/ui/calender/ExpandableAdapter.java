@@ -68,6 +68,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
         private ArrayList<Chip> chipList;
         private Data data;
         private int position;
+        private FlexboxLayout flexboxLayout;
         // item을 처음 생성 할 때만 실행돼야 하는데 왜 2번 더 실행되냐고 =====================================================
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -75,51 +76,57 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             textView1 = itemView.findViewById(R.id.textView1);
             imageView1 = itemView.findViewById(R.id.imageView1);
             chipList = new ArrayList<>();
-
+//            Chip chip = itemView.findViewById(R.id.chip);
+//
+//            ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
+//            chip.setChipDrawable(drawable);
+//            chip.setPadding(10, 10, 10,10);
+//            chip.setText("chip" + tmp++);
+//            chipList.add(chip);
             // *************** DB **************** //
             // db에서 선택된 감정 전부 선택된걸로 표시
             // textView1(감정종류)에 따라서 chip(emotion)변경
-            FlexboxLayout flexboxLayout = itemView.findViewById(R.id.itemFlexBox);
-
-            for (int i = 0; i < 2; i++ ) {
-                final Chip chip = new Chip(context);
-                ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
-                // chip 선택된 것 표시
-                chip.setChipDrawable(drawable);
-                chip.setPadding(10, 10, 10,10);
-
-                chip.setText(tmp + " 감정 ");
-                Log.d("tmp", String.valueOf(tmp));
-                tmp++;
-                chip.setOnClickListener(new Chip.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("chip ", chip.getText()+"");
-                        if (selectedChipList.contains(chip)) {
-                            Log.d("~","chip 존재해서 삭제");
-                            selectedChipList.remove(chip);
-                        } else {
-                            selectedChipList.add(chip);
-                            Log.d("~", "chip 새로 추가");
-                        }
-//                        chip.setChipBackgroundColorResource(R.color.colorPrimary);
-                    }
-                });
-                chipList.add(chip);
-                flexboxLayout.addView(chip);
-            }
-            Log.d("chip len",  chipList.size() + " ");
+//            FlexboxLayout flexboxLayout = itemView.findViewById(R.id.itemFlexBox);
+//
+//            for (int i = 0; i < 2; i++ ) {
+//                final Chip chip = new Chip(context);
+//                ChipDrawable drawable = ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_MaterialComponents_Chip_Choice);
+//                // chip 선택된 것 표시
+//                chip.setChipDrawable(drawable);
+//                chip.setPadding(10, 10, 10,10);
+//
+//                chip.setText(tmp + " 감정 ");
+//                Log.d("tmp", String.valueOf(tmp));
+//                tmp++;
+//                chip.setOnClickListener(new Chip.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Log.d("chip ", chip.getText()+"");
+//                        if (selectedChipList.contains(chip)) {
+//                            Log.d("~","chip 존재해서 삭제");
+//                            selectedChipList.remove(chip);
+//                        } else {
+//                            selectedChipList.add(chip);
+//                            Log.d("~", "chip 새로 추가");
+//                        }
+////                        chip.setChipBackgroundColorResource(R.color.colorPrimary);
+//                    }
+//                });
+//                chipList.add(chip);
+//                flexboxLayout.addView(chip);
+//            }
+//            Log.d("chip len",  chipList.size() + " ");
         }
 
         // item.xml 값 세팅
         void onBind(Data data, int position) {
             this.data = data;
             this.position = position;
-
             // *************** DB **************** //
             // textView1(감정), imageView(대표 이미지) 세팅
             textView1.setText(data.getTitle());
             imageView1.setImageResource(data.getResId());
+
             changeVisibility(selectedItems.get(position));
 
             itemView.setOnClickListener(this);
@@ -129,26 +136,28 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 
         @Override
         public void onClick(View v) {
-//            Log.d("obj", v.toString());
-//            if (selectedItems.get(position)) {
-////                selectedItems.setValueAt(position, false);
-//                selectedItems.delete(position);
-//            } else {
-//                selectedItems.delete(prePosition);
-//                selectedItems.put(position, true);
-////                selectedItems.append(position, true);
-//            }
-//            if (prePosition != -1) notifyItemChanged(prePosition);
-//            notifyItemChanged(position);
-//            prePosition = position;
-
-            if ( selectedItems.get(position, false) ){
-                selectedItems.put(position, false);
-                v.setBackgroundColor(Color.WHITE);
-            } else {
-                selectedItems.put(position, true);
-                v.setBackgroundColor(Color.BLUE);
+            Log.d("len", String.valueOf(selectedItems.size()));
+            for (int i = 0; i < selectedItems.size(); i++) {
+                Log.d("item ~~~~~~", selectedItems.get(i)+"");
             }
+            Log.d("pos", String.valueOf(position));
+            if (selectedItems.get(position)) {
+                selectedItems.delete(position);
+            } else {
+                selectedItems.delete(prePosition);
+                selectedItems.put(position, true);
+            }
+            if (prePosition != -1) notifyItemChanged(prePosition);
+            notifyItemChanged(position);
+            prePosition = position;
+
+//            if ( selectedItems.get(position, false) ){
+//                selectedItems.put(position, false);
+//                v.setBackgroundColor(Color.WHITE);
+//            } else {
+//                selectedItems.put(position, true);
+//                v.setBackgroundColor(Color.BLUE);
+//            }
         }
         // animation & visible/gone
         private void changeVisibility(final boolean isExpanded) {
