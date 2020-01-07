@@ -18,6 +18,7 @@ import com.example.warmer.R;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 
@@ -26,10 +27,12 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     private ArrayList<Data> listData = new ArrayList<>();                  // adapter에 들어갈 list 입니다.
     private Context context;
     private SparseBooleanArray selectedItems = new SparseBooleanArray();   // Item의 클릭 상태를 저장할 array 객체
-    private ArrayList<Chip> selectedChipList = new ArrayList<>();
+    public static ArrayList<String> selectedChipList = new ArrayList<>();
     private int prePosition = -1;                                          // 직전에 클릭됐던 Item의 position
     private ArrayList<Chip[]> chipList;
     private Chip chip1, chip2, chip3, chip4, chip5;
+    private ChipGroup chipGroup;
+    private int tmp = 0;
 
     @NonNull
     @Override
@@ -63,14 +66,15 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
-    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView textView1;
         private ImageView imageView1;
-        private FlexboxLayout flexboxLayout;
-        private ArrayList<Chip> chipList;
+        private ChipGroup chipGroup;
+        private ArrayList<String> chipList = new ArrayList<>();
         private Data data;
         private int position;
-        // item을 처음 생성 할 때만 실행돼야 하는데 왜 2번 더 실행되냐고 =====================================================
+
+        // click 메소드를 오버라이딩 하면 생성자가 또 실행(2번만) ??????????????? why ??????????????
         ItemViewHolder(View itemView) {
             super(itemView);
             Log.d("constructr","~~~~~~~~~~");
@@ -82,8 +86,20 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             chip3 = itemView.findViewById(R.id.chip3);
             chip4 = itemView.findViewById(R.id.chip4);
             chip5 = itemView.findViewById(R.id.chip5);
+            chipGroup = itemView.findViewById(R.id.chipGroup);
 
-            chipList = new ArrayList<>();
+            chip1.setText(tmp++ + "chip");
+            chip2.setText(tmp++ + "chip");
+            chip3.setText(tmp++ + "chip");
+            chip4.setText(tmp++ + "chip");
+            chip5.setText(tmp++ + "chip");
+
+            chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(ChipGroup chipGroup, int i) {
+                    Log.d("chip ", i+"");
+                }
+            });
         }
 
         // item.xml 값 세팅
@@ -94,22 +110,17 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             // textView1(감정), imageView(대표 이미지) 세팅
             textView1.setText(data.getTitle());
             imageView1.setImageResource(data.getResId());
-            chip1.setText("chip1");
-            flexboxLayout = data.getFlexboxLayout();
 
-            changeVisibility(selectedItems.get(position));
+//            changeVisibility(selectedItems.get(position));
 
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
 //            textView1.setOnClickListener(this);
 //            imageView1.setOnClickListener(this);
         }
 
         // 클릭하면 ItemViewHolder가 2번 더 실행됨??????????
-        @Override
-        public void onClick(View v) {
-//            Log.d("len", String.valueOf(selectedItems.size()));
-//            this.chip2.setText("chip2");
-//            Log.d("pos", String.valueOf(position));
+//        @Override
+//        public void onClick(View v) {
 //            if (selectedItems.get(position)) {
 //                selectedItems.delete(position);
 //            }
@@ -120,30 +131,32 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 //            if (prePosition != -1) notifyItemChanged(prePosition);
 //            notifyItemChanged(position);
 //            prePosition = position;
-        }
-        // animation & visible/gone
-        private void changeVisibility(final boolean isExpanded) {
-            // height 값을 dp로 지정해서 넣고싶으면 아래 소스를 이용
-            int dpValue = 150;
-            float d = context.getResources().getDisplayMetrics().density;
-            int height = (int) (dpValue * d);
+//        }
 
-            // ValueAnimator.ofInt(int... values)는 View가 변할 값을 지정, 인자는 int 배열
-            ValueAnimator va = isExpanded ? ValueAnimator.ofInt(0, height) : ValueAnimator.ofInt(height, 0);
-            // Animation이 실행되는 시간, n/1000초
-            va.setDuration(600);
-            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    for (Chip chip : chipList) {
-                        chip.requestLayout();
-                        chip.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-                    }
-                }
-            });
-            // Animation start
-            va.start();
-        }
+
+        // animation & visible/gone
+//        private void changeVisibility(final boolean isExpanded) {
+//            // height 값을 dp로 지정해서 넣고싶으면 아래 소스를 이용
+//            int dpValue = 150;
+//            float d = context.getResources().getDisplayMetrics().density;
+//            int height = (int) (dpValue * d);
+//
+//            // ValueAnimator.ofInt(int... values)는 View가 변할 값을 지정, 인자는 int 배열
+//            ValueAnimator va = isExpanded ? ValueAnimator.ofInt(0, height) : ValueAnimator.ofInt(height, 0);
+//            // Animation이 실행되는 시간, n/1000초
+//            va.setDuration(600);
+//            va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                @Override
+//                public void onAnimationUpdate(ValueAnimator animation) {
+//                    for (Chip chip : chipList) {
+//                        chip.requestLayout();
+//                        chip.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+//                    }
+//                }
+//            });
+//            // Animation start
+//            va.start();
+//        }
 
     }
 }

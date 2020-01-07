@@ -34,7 +34,8 @@
                 android:gravity="center"
                 android:layout_marginTop="20dp"
                 android:textSize="15dp"
-                android:hint="누구에게 어떻게 느낀 감정인가요?"/>
+                android:hint="누구에게 어떻게 느낀 감정인가요?"
+                android:inputType="text"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
