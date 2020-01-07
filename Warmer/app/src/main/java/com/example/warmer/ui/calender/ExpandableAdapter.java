@@ -29,6 +29,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     private ArrayList<Chip> selectedChipList = new ArrayList<>();
     private int prePosition = -1;                                          // 직전에 클릭됐던 Item의 position
     private ArrayList<Chip[]> chipList;
+    private Chip chip1, chip2, chip3, chip4, chip5;
 
     @NonNull
     @Override
@@ -68,7 +69,6 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
         private FlexboxLayout flexboxLayout;
         private ArrayList<Chip> chipList;
         private Data data;
-        private Chip chip1, chip2, chip3, chip4, chip5;
         private int position;
         // item을 처음 생성 할 때만 실행돼야 하는데 왜 2번 더 실행되냐고 =====================================================
         ItemViewHolder(View itemView) {
@@ -104,6 +104,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
 //            imageView1.setOnClickListener(this);
         }
 
+        // 클릭하면 ItemViewHolder가 2번 더 실행됨??????????
         @Override
         public void onClick(View v) {
 //            Log.d("len", String.valueOf(selectedItems.size()));

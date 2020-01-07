@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import com.example.warmer.ui.calender.Decorator.EventDecorator;
 import com.example.warmer.ui.calender.Decorator.OneDayDecorator;
 import com.example.warmer.ui.calender.Decorator.SaturdayDecorator;
 import com.example.warmer.ui.calender.Decorator.SundayDecorator;
-import com.example.warmer.ui.community.Diary;
 import com.example.warmer.ui.home.ThumbnailAdapter;
 import com.example.warmer.ui.mypage.MyPage;
 import com.example.warmer.ui.network.VolleySingleton;
@@ -42,7 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,7 +54,6 @@ public class Calender extends Fragment {
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     private final int ADD_EMOTION = 1;
     private View view;
-    private ArrayList<Diary> diary_list;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +63,6 @@ public class Calender extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_calendar, container, false);
-
         materialCalendarView = (MaterialCalendarView)view.findViewById(R.id.calendarView);
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
@@ -83,34 +78,8 @@ public class Calender extends Fragment {
 
         // **************** DB에 작성된 나의 일기 목록 ***************** //
         String[] result = {"2020,01,14","2020,01,13","2020,01,12"};
-        // construct request to get currents user's diaries
-        JsonArrayRequest privateDiaryRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                "http://192.249.19.252:1380/diaries/:"+MyPage.getUserId(),
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        diary_list = new ArrayList<>();
-                        addJsonToDairyList(response, diary_list);
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("ERROR: ", error.toString());
-                    }
-                }
-        );
-
-        // add the request to singleton requestQueue
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(privateDiaryRequest);
-
-
-        // display dates when diaries are written
-        // new ApiSimulator(diary_list).executeOnExecutor(Executors.newSingleThreadExecutor());
-
+        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
         // 날짜 클릭 리스너
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -126,9 +95,30 @@ public class Calender extends Fragment {
                 final String shot_Day = strDate.substring(0,4)+"."+strDate.substring(4,6)+"."+strDate.substring(6,8);
 
                 materialCalendarView.clearSelection();
+
                 Toast.makeText(getContext(), shot_Day , Toast.LENGTH_SHORT).show();
 
-                textview.setText(getDiary(diary_list, shot_Day));
+                JsonArrayRequest privateDiaryRequest = new JsonArrayRequest(
+                        Request.Method.GET,
+                        "http://192.249.19.252:1380/diaries/:"+MyPage.getUserId(),
+                        null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                textview.setText(getDairy(response, shot_Day));
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("ERROR: ", error.toString());
+                                textview.setText("No diary this day");
+                            }
+                        }
+                );
+
+                // add the request to singleton requestQueue
+                VolleySingleton.getInstance(getContext()).addToRequestQueue(privateDiaryRequest);
             }
         });
 
@@ -157,8 +147,8 @@ public class Calender extends Fragment {
     }
 
     public class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
-        ArrayList<Diary> Time_Result = new ArrayList<>();
-        ApiSimulator(ArrayList<Diary> Time_Result){
+        String[] Time_Result;
+        ApiSimulator(String[] Time_Result){
             this.Time_Result = Time_Result;
         }
 
@@ -176,17 +166,15 @@ public class Calender extends Fragment {
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
-            for(int i = 0 ; i < Time_Result.size() ; i ++){
+            for(int i = 0 ; i < Time_Result.length ; i ++){
                 CalendarDay day = CalendarDay.from(calendar);
-                String[] time = Time_Result.get(i).getDate().split(".");
-                if(time.length>0) {
-                    int year = Integer.parseInt(time[0]);
-                    int month = Integer.parseInt(time[1]);
-                    int dayy = Integer.parseInt(time[2]);
-                    Log.d("day", year + " " + month +" "+dayy);
-                    dates.add(day);
-                    calendar.set(year,month-1,dayy);
-                }
+                String[] time = Time_Result[i].split(",");
+                int year = Integer.parseInt(time[0]);
+                int month = Integer.parseInt(time[1]);
+                int dayy = Integer.parseInt(time[2]);
+                Log.d("day", year + " " + month +" "+dayy);
+                dates.add(day);
+                calendar.set(year,month-1,dayy);
             }
 
             return dates;
@@ -205,24 +193,15 @@ public class Calender extends Fragment {
 
     }
 
-    public void addJsonToDairyList(JSONArray jsonArray, ArrayList<Diary> diary_list) {
+    public String getDairy(JSONArray jsonArray, String date) {
         try {
             for (int i=0; i<jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Diary diary = new Diary("", "");
-                diary.setDate(jsonObject.getString("date"));
-                diary.setContents(jsonObject.getString("text"));
-                diary_list.add(diary);
+                if (jsonObject.getString("date").equals(date))
+                    return jsonObject.getString("text");
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    public String getDiary(ArrayList<Diary> diary_list, String date) {
-        for (int i=0; i<diary_list.size(); i++) {
-            if(diary_list.get(i).getDate().equals(date))
-                return diary_list.get(i).getContents();
         }
         return "No diary this day";
     }
