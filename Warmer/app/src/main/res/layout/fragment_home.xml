@@ -21,8 +21,8 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/m" />
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/title1"
                     android:text="마음을 따뜻하게 해주는 영상"
@@ -31,31 +31,52 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="30dp"
-                    android:paddingLeft="10dp"/>
-
+                    android:layout_marginLeft="10dp"/>
+                <EditTextgit 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/title1"
+                    android:gravity="bottom"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                    android:paddingTop="15dp"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/thumbnail_list1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/title1" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/title2"
-                    android:text="따뜻한 작가님들의 따뜻한 사진"
-                    android:textStyle="bold"
-                    android:textColor="#111111"
-                    android:paddingTop="30dp"
-                    android:paddingLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/thumbnail_list1"/>
+                    android:paddingLeft="10dp"
+                    android:paddingTop="30dp"
+                    android:text="따뜻한 작가님들의 따뜻한 사진"
+                    android:textColor="#111111"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/title2"
+                    android:gravity="bottom"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="15dp"
+                    android:paddingTop="15dp"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/thumbnail_list2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/title2" />
-
             </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
