@@ -180,7 +180,7 @@ public class Calender extends Fragment {
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
             Diary dummy = new Diary("2020.01.01", "dummy", "dummy");
             Time_Result.add(dummy);
-            for(int i = 0 ; i < Time_Result.size() ; i ++){
+            for(int i=0; i<Time_Result.size(); i++){
                 CalendarDay day = CalendarDay.from(calendar);
                 String[] time = Time_Result.get(i).getDate().split("\\.");
                 int year = Integer.parseInt(time[0]);

@@ -41,6 +41,8 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageButton thumbnail_btn;
         private TextView main_title;
+        private TextView subtitle;
+
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -61,6 +63,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
             // 뷰 객체에 대한 참조
             thumbnail_btn = itemView.findViewById(R.id.thumbnail_item);
             main_title = itemView.findViewById(R.id.main_title);
+            subtitle = itemView.findViewById(R.id.subtitle);
         }
     }
 
@@ -79,6 +82,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.View
         Picasso.get().load(thumb.getThumbURL())
                 .into(holder.thumbnail_btn);
         holder.main_title.setText(thumb.getMainTitle());
+        holder.subtitle.setText(thumb.getSubtitle());
 
 
         holder.thumbnail_btn.setOnClickListener(new View.OnClickListener() {
