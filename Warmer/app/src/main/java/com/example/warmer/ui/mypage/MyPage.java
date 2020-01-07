@@ -36,6 +36,7 @@ import java.util.ArrayList;
 public class MyPage extends Fragment {
     private PopupWindow mPopupWindow;
     private static Boolean loginStatus = false;
+    private static String userId = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class MyPage extends Fragment {
 
                                         if(checkPassword(response, password)) {
                                             setLoginStatus(true);
+                                            setUserId(id);
                                             mPopupWindow.dismiss();
                                         }
                                         else {
@@ -242,5 +244,13 @@ public class MyPage extends Fragment {
 
     private void setLoginStatus(Boolean bool) {
         this.loginStatus = bool;
+    }
+
+    private void setUserId(String uid) {
+        this.userId = uid;
+    }
+
+    public static String getUserId() {
+        return userId;
     }
 }
