@@ -20,12 +20,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.warmer.R;
 import com.example.warmer.ui.network.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class MyPage extends Fragment {
     private PopupWindow mPopupWindow;
@@ -72,13 +75,14 @@ public class MyPage extends Fragment {
 
 
                         // set request to get account information
-                        JsonArrayRequest accountRequest = new JsonArrayRequest(
+                        JsonObjectRequest accountRequest = new JsonObjectRequest(
                                 Request.Method.GET,
                                 "http://192.249.19.252:1380/accounts/:"+"\""+id+"\"",
                                 null,
-                                new Response.Listener<JSONArray>() {
+                                new Response.Listener<JSONObject>() {
                                     @Override
-                                    public void onResponse(JSONArray response) {
+                                    public void onResponse(JSONObject response) {
+
                                         if(checkPassword(response, password)) {
                                             mPopupWindow.dismiss();
                                         }
@@ -91,8 +95,22 @@ public class MyPage extends Fragment {
                                 },
                                 new Response.ErrorListener() {
                                     @Override
+                                    // only cover status 404(NOT FOUND)
                                     public void onErrorResponse(VolleyError error) {
-                                        Log.d("FAIL", "accountGET");
+                                        idText.setText("");
+                                        passwordText.setText("");
+                                        Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
+//                                        try {
+//                                            String response = new String(error.networkResponse.data, "utf-8");
+//                                            JSONObject jsonObject = new JSONObject(response);
+//                                        } catch (UnsupportedEncodingException ueError) {
+//                                            idText.setText("");
+//                                            passwordText.setText("");
+//                                            Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
+//                                        } catch (JSONException jError) {
+//                                            Log.d("JSON", "ERROR");
+//                                            jError.printStackTrace();
+//                                        }
                                     }
                                 }
                         );
@@ -105,19 +123,15 @@ public class MyPage extends Fragment {
         return view;
     }
 
-    public Boolean checkPassword(JSONArray jsonArray, String password) {
+    public Boolean checkPassword(JSONObject jsonObject, String password) {
         try{
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
             if(jsonObject.getString("password").equals(password)){
-                Log.d("account", "correct");
                 return true;
             }
             else
-                Log.d("account", "wrong password");
                 return false;
-        }
-        catch (JSONException e) {
-            Log.d("account", "wrong id");
+        } catch (JSONException je) {
+            je.printStackTrace();
             return false;
         }
     }
