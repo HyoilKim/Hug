@@ -1,5 +1,6 @@
 package com.example.warmer.ui.mypage;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +31,7 @@ import com.google.gson.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -50,12 +53,18 @@ public class MyPage extends Fragment {
 
         Button signInButton = (Button) view.findViewById(R.id.sign_in);
         Button signUpButton = (Button) view.findViewById(R.id.sign_up);
+        final LinearLayout background = (LinearLayout) view.findViewById(R.id.mypage_background);
 
         // set popup window for sign-in
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 View popupView = getLayoutInflater().inflate(R.layout.login_popup, null);
+
+                final TextView header = (TextView) popupView.findViewById(R.id.popup_header);
+                header.setText("[ Login ]");
+                background.setBackgroundColor(Color.parseColor("#FAFAFA"));
                 mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //popupView 에서 (LinearLayout 을 사용) 레이아웃이 둘러싸고 있는 컨텐츠의 크기 만큼 팝업 크기를 지정
                 mPopupWindow.setFocusable(true); // 외부 영역 선택히 PopUp 종료
@@ -71,8 +80,10 @@ public class MyPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         mPopupWindow.dismiss();
+                        background.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     }
                 });
+
 
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -95,6 +106,8 @@ public class MyPage extends Fragment {
                                             setLoginStatus(true);
                                             setUserId(id);
                                             mPopupWindow.dismiss();
+                                            background.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                            Toast.makeText(getContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
                                         }
                                         else {
                                             setLoginStatus(false);
@@ -127,6 +140,9 @@ public class MyPage extends Fragment {
             @Override
             public void onClick(View v) {
                 View popupView = getLayoutInflater().inflate(R.layout.login_popup, null);
+                final TextView header = (TextView) popupView.findViewById(R.id.popup_header);
+                header.setText("[ Creating account ]");
+                background.setBackgroundColor(Color.parseColor("#FAFAFA"));
                 mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //popupView 에서 (LinearLayout 을 사용) 레이아웃이 둘러싸고 있는 컨텐츠의 크기 만큼 팝업 크기를 지정
                 mPopupWindow.setFocusable(true); // 외부 영역 선택히 PopUp 종료
@@ -142,6 +158,7 @@ public class MyPage extends Fragment {
                     @Override
                     public void onClick(View v) {
                         mPopupWindow.dismiss();
+                        background.setBackgroundColor(Color.parseColor("#FFFFFF"));
                     }
                 });
 

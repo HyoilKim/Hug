@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_community"
         android:name="com.example.warmer.ui.community.CommunityFragment"
-        android:label="@layout/fragment_community"
+        android:label="너의 감정"
         tools:layout="@layout/fragment_community" />
 
     <fragment

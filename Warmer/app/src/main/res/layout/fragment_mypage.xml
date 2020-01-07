@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="top|center"
-    android:orientation="horizontal">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SIGN IN"
-        android:id="@+id/sign_in"/>
+    <LinearLayout
+        android:id="@+id/mypage_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SIGN UP"
-        android:id="@+id/sign_up"/>
+        <Button
+            android:id="@+id/sign_in"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:text="Login"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:backgroundTint="#FFFFFF"
+            app:strokeColor="#000000"
+            app:strokeWidth="2dp" />
+
+        <Button
+            android:id="@+id/sign_up"
+            android:layout_width="200dp"
+            android:layout_height="70dp"
+            android:text="Create Account"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:backgroundTint="#FFFFFF"
+            app:strokeColor="#000000"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
 </LinearLayout>
