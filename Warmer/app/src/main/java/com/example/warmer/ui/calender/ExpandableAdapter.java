@@ -30,7 +30,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
     public static ArrayList<String> selectedChipList = new ArrayList<>();
     private int prePosition = -1;                                          // 직전에 클릭됐던 Item의 position
     private ArrayList<Chip[]> chipList;
-    private Chip chip1, chip2, chip3, chip4, chip5;
+    private Chip chip1, chip2, chip3, chip4, chip5, chip6, chip7, chip8;
     private ChipGroup chipGroup;
     private int tmp = 0;
 
@@ -86,20 +86,45 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             chip3 = itemView.findViewById(R.id.chip3);
             chip4 = itemView.findViewById(R.id.chip4);
             chip5 = itemView.findViewById(R.id.chip5);
+            chip6 = itemView.findViewById(R.id.chip6);
+            chip7 = itemView.findViewById(R.id.chip7);
+            chip8 = itemView.findViewById(R.id.chip8);
             chipGroup = itemView.findViewById(R.id.chipGroup);
 
-            chip1.setText(tmp++ + "chip");
-            chip2.setText(tmp++ + "chip");
-            chip3.setText(tmp++ + "chip");
-            chip4.setText(tmp++ + "chip");
-            chip5.setText(tmp++ + "chip");
-
-            chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(ChipGroup chipGroup, int i) {
-                    Log.d("chip ", i+"");
-                }
-            });
+            if (tmp < 1) {
+                chip1.setText("기운 없는");
+                chip2.setText("위축된");
+                chip3.setText("울고 싶은");
+                chip4.setText("외로운");
+                chip5.setText("억울한");
+                chip6.setText("속상한");
+                chip7.setText("서러운");
+                chip8.setText("비참한");
+            } else if (tmp < 2) {
+                chip1.setText("분한");
+                chip2.setText("신경질 나는");
+                chip3.setText("약 오른");
+                chip4.setText("구역질 나는");
+                chip5.setText("미운");
+                chip6.setText("증로스러운");
+                chip7.setText("못마땅한");
+                chip8.setText("어이 없는");
+            } else  if (tmp < 3) {
+                chip1.setText("긴장된");
+                chip2.setText("조심스러운");
+                chip3.setText("찜찜한");
+                chip4.setText("무서운");
+                chip5.setText("소름끼치는");
+                chip6.setText("겁나는");
+                chip7.setText("미칠듯한");
+                chip8.setText("부담스러운");
+            }  tmp++;
+//            chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(ChipGroup chipGroup, int i) {
+//                    Log.d("chip ", i+"");
+//                }
+//            });
         }
 
         // item.xml 값 세팅
@@ -109,13 +134,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.It
             // *************** DB **************** //
             // textView1(감정), imageView(대표 이미지) 세팅
             textView1.setText(data.getTitle());
-            imageView1.setImageResource(data.getResId());
 
-//            changeVisibility(selectedItems.get(position));
-
-//            itemView.setOnClickListener(this);
-//            textView1.setOnClickListener(this);
-//            imageView1.setOnClickListener(this);
         }
 
         // 클릭하면 ItemViewHolder가 2번 더 실행됨??????????

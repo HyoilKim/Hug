@@ -140,7 +140,7 @@ public class SelectEmotion extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.item, null, false);
 
         // ********** DB의 감정들 불러오기 **************** //
-        List<String> listTitle = Arrays.asList("불안", "우울", "힘이 빠지는", "심각한");
+        List<String> listTitle = Arrays.asList("슬픈", "화난", "불안한");
         for (int i = 0; i < listTitle.size(); i++) {
             Data data = new Data();
             data.setTitle(listTitle.get(i));

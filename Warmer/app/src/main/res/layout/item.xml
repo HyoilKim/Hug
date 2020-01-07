@@ -8,7 +8,7 @@
     android:padding="8dp"
     android:gravity="center_vertical"
     android:layout_marginBottom="8dp"
-    android:background="@color/background">
+    android:background="@color/chipColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,8 +36,7 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_height="50dp" />
     </LinearLayout>
 
     <com.google.android.material.chip.ChipGroup
@@ -47,38 +46,59 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip1"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="empty1"
             android:theme="@style/Theme.MaterialComponents.Light"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip2"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="empty2"
             android:theme="@style/Theme.MaterialComponents.Light"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip3"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="empty3"
             android:theme="@style/Theme.MaterialComponents.Light"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip4"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="empty4"
             android:theme="@style/Theme.MaterialComponents.Light"/>
         <com.google.android.material.chip.Chip
             android:id="@+id/chip5"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="empty5"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip6"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="empty6"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip7"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="empty7"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip8"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="empty8"
             android:theme="@style/Theme.MaterialComponents.Light"/>
     </com.google.android.material.chip.ChipGroup>
 
