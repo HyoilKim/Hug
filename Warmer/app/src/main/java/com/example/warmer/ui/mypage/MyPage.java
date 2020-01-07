@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
 
 public class MyPage extends Fragment {
     private PopupWindow mPopupWindow;
-    private static Boolean isLoggedIn = false;
+    private static Boolean loginStatus = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,9 +84,11 @@ public class MyPage extends Fragment {
                                     public void onResponse(JSONObject response) {
 
                                         if(checkPassword(response, password)) {
+                                            setLoginStatus(true);
                                             mPopupWindow.dismiss();
                                         }
                                         else {
+                                            setLoginStatus(false);
                                             idText.setText("");
                                             passwordText.setText("");
                                             Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
@@ -97,6 +99,7 @@ public class MyPage extends Fragment {
                                     @Override
                                     // only cover status 404(NOT FOUND)
                                     public void onErrorResponse(VolleyError error) {
+                                        setLoginStatus(false);
                                         idText.setText("");
                                         passwordText.setText("");
                                         Toast.makeText(getContext(), "Incorrect ID or password" , Toast.LENGTH_SHORT).show();
@@ -134,5 +137,13 @@ public class MyPage extends Fragment {
             je.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isLoggedIn() {
+        return this.loginStatus;
+    }
+
+    private void setLoginStatus(Boolean bool) {
+        this.loginStatus = bool;
     }
 }
