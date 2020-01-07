@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
     <ImageButton
         android:id="@+id/thumbnail_item"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:scaleType="fitCenter"
         android:background="@null"/>

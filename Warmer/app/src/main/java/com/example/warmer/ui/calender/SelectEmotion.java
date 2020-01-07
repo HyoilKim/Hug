@@ -32,6 +32,7 @@ public class SelectEmotion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCompatActivity)this).getSupportActionBar().hide();
         setContentView(R.layout.activity_add_emotion);
 
         RecyclerView recyclerview = findViewById(R.id.recyclerView);
